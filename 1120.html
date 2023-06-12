@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>国光的vGPU教程 | 导航站</title>
+<meta name="theme-color" content="#2C2E2F">
+<meta name="keywords">
+<meta name="description" content="首先将可以升级的软件升级到最新版本：">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://158666.xyz/1120.html"> 
+<meta property="og:title" content="国光的vGPU教程 | 导航站">
+<meta property="og:description" content="首先将可以升级的软件升级到最新版本：">
+<meta property="og:image" content="https://image.3001.net/images/20230112/16734940272580.png">
+<meta property="og:site_name" content="导航站">
+<link rel="shortcut icon" href="http://158666.xyz/wp-content/themes/webstackpro/images/favicon.png">
+<link rel="apple-touch-icon" href="http://158666.xyz/wp-content/themes/webstackpro/images/app-ico.png">
+<meta name="robots" content="noindex, nofollow">
+<link rel="dns-prefetch" href="//ssl.captcha.qq.com">
+<link rel="dns-prefetch" href="//use.fontawesome.com">
+<link rel="stylesheet" id="wp-block-library-css" href="http://158666.xyz/wp-includes/css/dist/block-library/style.min.css?ver=6.2.2" type="text/css" media="all">
+<link rel="stylesheet" id="classic-theme-styles-css" href="http://158666.xyz/wp-includes/css/classic-themes.min.css?ver=6.2.2" type="text/css" media="all">
+<style id="global-styles-inline-css" type="text/css">body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--duotone--dark-grayscale: url('#wp-duotone-dark-grayscale');--wp--preset--duotone--grayscale: url('#wp-duotone-grayscale');--wp--preset--duotone--purple-yellow: url('#wp-duotone-purple-yellow');--wp--preset--duotone--blue-red: url('#wp-duotone-blue-red');--wp--preset--duotone--midnight: url('#wp-duotone-midnight');--wp--preset--duotone--magenta-yellow: url('#wp-duotone-magenta-yellow');--wp--preset--duotone--purple-green: url('#wp-duotone-purple-green');--wp--preset--duotone--blue-orange: url('#wp-duotone-blue-orange');--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}body .is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}body .is-layout-flex{flex-wrap: wrap;align-items: center;}body .is-layout-flex > *{margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+.wp-block-navigation a:where(:not(.wp-element-button)){color: inherit;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}
+.wp-block-pullquote{font-size: 1.5em;line-height: 1.6;}</style>
+<link rel="stylesheet" id="iconfont-css" href="http://158666.xyz/wp-content/themes/webstackpro/css/iconfont.css?ver=2.0406" type="text/css" media="all">
+<link rel="stylesheet" id="font-awesome-css" href="//use.fontawesome.com/releases/v5.13.0/css/all.css?ver=2.0406" type="text/css" media="all">
+<link rel="stylesheet" id="font-awesome4-css" href="//use.fontawesome.com/releases/v5.13.0/css/v4-shims.css?ver=2.0406" type="text/css" media="all">
+<link rel="stylesheet" id="bootstrap-css" href="http://158666.xyz/wp-content/themes/webstackpro/css/bootstrap.min.css?ver=2.0406" type="text/css" media="all">
+<link rel="stylesheet" id="lightbox-css" href="http://158666.xyz/wp-content/themes/webstackpro/css/jquery.fancybox.min.css?ver=2.0406" type="text/css" media="all">
+<link rel="stylesheet" id="style-css" href="http://158666.xyz/wp-content/themes/webstackpro/css/style.css?ver=2.0406" type="text/css" media="all">
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/jquery.min.js?ver=2.0406" id="jquery-js"></script>
+<link rel="canonical" href="http://158666.xyz/1120.html">
+<link rel="alternate" type="application/json+oembed" href="http://158666.xyz/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fhttp%3A%2F%2F158666.xyz%2F1120.html">
+<link rel="alternate" type="text/xml+oembed" href="http://158666.xyz/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fhttp%3A%2F%2F158666.xyz%2F1120.html#038;format=xml">
+<meta name="bmi-version" content="1.2.9">
+</head> 
+<body class="io-black-mode">
+   <div class="page-container">
+      
+
+        <div id="sidebar" class="sticky sidebar-nav fade ">
+            <div class="modal-dialog h-100  sidebar-nav-inner">
+                <div class="sidebar-logo border-bottom border-color">
+                    <!-- logo -->
+                    <div class="logo overflow-hidden">
+                        <a href="http://158666.xyz/" class="logo-expanded">
+                            <img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo_l@2x.png" height="40" class="d-none" alt="导航站">
+						    <img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo@2x.png" height="40" alt="导航站">
+                        </a>
+                        <a href="http://158666.xyz/" class="logo-collapsed">
+                            <img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo-dark_collapsed@2x.png" height="40" class="d-none" alt="导航站">
+						    <img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo-collapsed@2x.png" height="40" alt="导航站">
+                        </a>
+                    </div>
+                    <!-- logo end -->
+                </div>
+                <div class="sidebar-menu flex-fill">
+                    <div class="sidebar-scroll">
+                        <div class="sidebar-menu-inner">
+                            <ul>
+                                                                        <li class="sidebar-item">
+                                                <a href="http://158666.xyz/#search" class="smooth">
+                                                   <i class="iconfont icon-search  icon-fw icon-lg mr-2"></i>
+                                                   <span>搜索</span>
+                                                </a>
+                                            </li> 
+                                                                                <li class="sidebar-item">
+                                            <a href="javascript:;">
+                                               <i class="fa fa-star icon-fw icon-lg mr-2"></i>
+                                               <span>视频娱乐</span>
+                                               <i class="iconfont icon-arrow-r-m sidebar-more text-sm"></i>
+                                            </a>
+                                            <ul>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-168" class="smooth"><span>在线</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-169" class="smooth"><span>动漫</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-170" class="smooth"><span>下载</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-171" class="smooth"><span>不可说</span></a>
+                                                </li>
+                                                                                            </ul>
+                                        </li>
+                                                                        <li class="sidebar-item">
+                                            <a href="javascript:;">
+                                               <i class="fa fa-eercast icon-fw icon-lg mr-2"></i>
+                                               <span>自定义父级</span>
+                                               <i class="iconfont icon-arrow-r-m sidebar-more text-sm"></i>
+                                            </a>
+                                            <ul>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-50" class="smooth"><span>休闲游戏x小信息</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-55" class="smooth"><span>RPG</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-58" class="smooth"><span>角色扮演</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-57" class="smooth"><span>暗黑</span></a>
+                                                </li>
+                                                                                            </ul>
+                                        </li>
+                                 
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-top py-2 border-color">
+                    <div class="flex-bottom">
+                        <ul> 
+                            <li id="menu-item-222" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-222 sidebar-item"><a href="http://158666.xyz/include">
+        <i class="fas fa-weight icon-fw icon-lg mr-2"></i>
+                <span>申请收录</span></a></li>
+ 
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main-content flex-fill page">
+		<div id="header" class="page-header big sticky">
+			<div class="navbar navbar-expand-md">
+                <div class="container-fluid p-0">
+
+                    <a href="http://158666.xyz/" class="navbar-brand d-md-none">
+						<img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo-dark_collapsed@2x.png" class="logo-light" alt="导航站">
+						<img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo-collapsed@2x.png" class="logo-dark d-none" alt="导航站">
+                    </a>
+                    
+                    <div class="collapse navbar-collapse order-2 order-md-1">
+                        <div class="header-mini-btn">
+                            <label>
+                                <input id="mini-button" type="checkbox" checked>
+                                <svg viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"> 
+                                    <path class="line--1" d="M0 40h62c18 0 18-20-17 5L31 55"></path>
+                                    <path class="line--2" d="M0 50h80"></path>
+                                    <path class="line--3" d="M0 60h62c18 0 18 20-17-5L31 45"></path>
+                                </svg>
+                            </label>
+                        
+                        </div>
+                                                
+                    <!-- 天气  -->
+                    <div id="tp-weather-widget"></div>
+                      <script>(function(a,h,g,f,e,d,c,b){b=function(){d=h.createElement(g);c=h.getElementsByTagName(g)[0];d.src=e;d.charset="utf-8";d.async=1;c.parentNode.insertBefore(d,c)};a["SeniverseWeatherWidgetObject"]=f;a[f]||(a[f]=function(){(a[f].q=a[f].q||[]).push(arguments)});a[f].l=+new Date();if(a.attachEvent){a.attachEvent("onload",b)}else{a.addEventListener("load",b,false)}}(window,document,"script","SeniverseWeatherWidget","//cdn.sencdn.com/widget2/static/js/bundle.js?t="+parseInt((new Date().getTime() / 100000000).toString(),10)));
+                        window.SeniverseWeatherWidget('show', {
+                          flavor: "slim",
+                          location: "WTSQQYHVQ973",
+                          geolocation: true,
+                          language: "zh-Hans",
+                          unit: "c",
+                          theme: "auto",
+                          token: "2d2b0015-6055-42c9-b686-40963fdc0fc4",
+                          hover: "enabled",
+                          container: "tp-weather-widget"
+                        })</script>
+                    <!-- 天气 end -->
+                        						<ul class="navbar-nav site-menu mr-4">
+                            <li id="menu-item-283" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-283"><a href="http://158666.xyz/blog">博客</a></li>
+<li id="menu-item-272" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-272"><a href="#">关于</a></li>
+ 
+						</ul>
+                    </div>
+                    
+                    <ul class="nav navbar-menu text-xs order-1 order-md-2">
+                                                <!-- 一言 -->
+						<li class="nav-item mr-3 mr-lg-0 d-none d-lg-block">
+							<div class="text-sm overflowClip_1">
+                                <script src="//v1.hitokoto.cn/?encode=js&select=%23hitokoto" defer></script> 
+                                <span id="hitokoto"></span> 
+							</div>
+						</li>
+                        <!-- 一言 end -->
+                                                						<li class="nav-item d-md-none mobile-menu ml-4">
+							<a href="javascript:" id="sidebar-switch" data-toggle="modal" data-target="#sidebar"><i class="iconfont icon-classification icon-2x"></i></a>
+						</li>
+                    </ul>
+				</div>
+            </div>
+        </div>
+<div id="content" class="container my-4 my-md-5">
+	<div class="row">
+		<div class="col-lg-8">
+    	    <div class="panel card">
+			<div class="card-body">
+				<div class="panel-header mb-4">
+    	        	    	        	<h1 class="h3 mb-3">国光的vGPU教程</h1>
+    	        	<div class="d-flex flex-fill text-muted text-sm pb-4 border-bottom border-t">
+    	        	<span class="mr-3 d-none d-sm-block"><a href="http://158666.xyz/pve"><i class="iconfont icon-classification"></i> PVE</a></span>    	        	<span class="mr-3 d-none d-sm-block"><i class="iconfont icon-time"></i> 5小时前</span>
+					<span class="mr-3"><a href="http://158666.xyz/author/2" title="xonec"><i class="iconfont icon-user-circle"></i> xonec</a></span>
+					<div class="flex-fill"></div>
+					                	<span class="mr-3"><a class="smooth-n" href="#comments"> <i class="iconfont icon-comment"></i> 0</a></span>
+                	<span class="mr-3"><a class="btn-like btn-link-like " href="javascript:;" post_like data-id="1120"><i class="iconfont icon-like"></i> <span class="like-count">0</span></a></span>
+					</div>
+    	        </div>
+				    	        <div class="panel-body mt-2"> 
+					<hr>
+<p>title: vGPU教程<br>
+categories:</p>
+<ul>
+<li>PVE<br>
+toc_style_simple: true<br>
+date: '2023-05-05 17:39'<br>
+tags:</li>
+</ul>
+<hr>
+<h1>vGPU教程</h1>
+<h2>准备工作<a href="https://pve.sqlsec.com/4/5/#_1" title="Permanent link" target="_blank" rel="nofollow">¶</a>
+</h2>
+<h3>BIOS 设置<a href="https://pve.sqlsec.com/4/5/#bios" title="Permanent link" target="_blank" rel="nofollow">¶</a>
+</h3>
+<ul>
+<li>
+<strong>开启</strong> Intel VMX 虚拟化技术（PCIe 件直通必须）</li>
+<li>
+<strong>开启</strong> VT-d （PCIe 件直通必须）</li>
+<li>
+<strong>开启</strong> SR-IOV 网卡虚拟化技术 （高效先进的虚拟机网卡技术）</li>
+<li>
+<strong>开启</strong> Above 4G Decoding（vGPU 方案需要开启这个选项）</li>
+<li>
+<strong>开启</strong> Numa （多路 CPU 建议开启，提高多路 CPU 运行效率，合理分配负载）</li>
+<li>
+<strong>开启</strong> x2APIC（PCIe 硬件直通需要）</li>
+</ul>
+<p>一键安装脚本<br>
+<a href="https://github.com/jiangcuo/pve-doc-cn/tree/PVE-Nvidia-vGPU" target="_blank" rel="nofollow">jiangcuo/pve-doc-cn at PVE-Nvidia-vGPU (github.com)</a></p>
+<h3>依赖包安装<a href="https://pve.sqlsec.com/4/5/#_2" title="Permanent link" target="_blank" rel="nofollow">¶</a>
+</h3>
+<p>首先将可以升级的软件升级到最新版本：</p>
+<p>apt update<br>
+apt dist-upgrade`</p>
+<p>然后安装相关的依赖包，以及升级最新的 PVE Linux 内核：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-1-1)apt install -y build-essential dkms pve-headers mdevctl</code></p>
+<h3>配置内核<a href="https://pve.sqlsec.com/4/5/#_3" title="Permanent link" target="_blank" rel="nofollow">¶</a>
+</h3>
+<p>我们必须加载内核模块才能使 vGPU 工作：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-2-1)echo vfio &gt;&gt; /etc/modules  [](https://pve.sqlsec.com/4/5/#__codelineno-2-2)echo vfio_iommu_type1 &gt;&gt; /etc/modules  [](https://pve.sqlsec.com/4/5/#__codelineno-2-3)echo vfio_pci &gt;&gt; /etc/modules  [](https://pve.sqlsec.com/4/5/#__codelineno-2-4)echo vfio_virqfd &gt;&gt; /etc/modules</code></p>
+<p>阻止 Proxmox 自带的 Nvidia GPU 的开源新驱动程序：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-3-1)echo &quot;blacklist nvidiafb&quot; &gt;&gt; /etc/modprobe.d/blacklist.conf [](https://pve.sqlsec.com/4/5/#__codelineno-3-2)echo &quot;blacklist nouveau&quot; &gt;&gt; /etc/modprobe.d/blacklist.conf [](https://pve.sqlsec.com/4/5/#__codelineno-3-3)echo &quot;blacklist nvidia&quot; &gt;&gt; /etc/modprobe.d/blacklist.conf [](https://pve.sqlsec.com/4/5/#__codelineno-3-4)echo &quot;blacklist radeon&quot; &gt;&gt; /etc/modprobe.d/blacklist.conf [](https://pve.sqlsec.com/4/5/#__codelineno-3-5)echo &quot;blacklist amdgpu&quot; &gt;&gt; /etc/modprobe.d/blacklist.conf [](https://pve.sqlsec.com/4/5/#__codelineno-3-6)echo &quot;blacklist snd_hda_intel&quot; &gt;&gt; /etc/modprobe.d/blacklist.conf [](https://pve.sqlsec.com/4/5/#__codelineno-3-7)echo &quot;blacklist snd_hda_codec_hdmi&quot; &gt;&gt; /etc/modprobe.d/blacklist.conf [](https://pve.sqlsec.com/4/5/#__codelineno-3-8)echo &quot;blacklist i915&quot; &gt;&gt; /etc/modprobe.d/blacklist.conf</code></p>
+<p>应用我们的内核配置并重启:</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-4-1)update-initramfs -u -k all &amp;&amp; reboot</code></p>
+<h2>驱动安装<a href="https://pve.sqlsec.com/4/5/#_4" title="Permanent link" target="_blank" rel="nofollow">¶</a>
+</h2>
+<p>首先需要 PVE 宿主机安装 NVIDIA 的驱动，但是 N 卡的计算卡只针对企业商业用户并不开放给普通个人用户下载，所以我们得注册 NVIDIA 的企业账号登录才可以下载，具体可以参考 NVIDIA 官网文档：</p>
+<p><a href="https://docs.nvidia.com/grid/latest/grid-software-quick-start-guide/index.html#getting-your-nvidia-grid-software" target="_blank" rel="nofollow">Quick Start Guide :: NVIDIA Virtual GPU Software Documentation</a></p>
+<p>但是这个官方文档写的比较蛋疼，国内的用户大家直接看我下面的细节操作就行了。</p>
+<h3>企业账号<a href="https://pve.sqlsec.com/4/5/#_5" title="Permanent link" target="_blank" rel="nofollow">¶</a>
+</h3>
+<p>注册的时候尽量不要使用 gmail.com 或者 qq.com 等通用个人邮箱服务，人工审核大概率不通过。国光建议大家考虑使用域名邮箱或者其他企业的邮箱，这里我使用的是自己网站的域名邮箱： <strong>admin@sqlsec.com</strong>，总的来说国内<a href="https://enterpriseproductregistration.nvidia.com/?LicType=EVAL&amp;ProductFamily=vGPU" target="_blank" rel="nofollow">申请注册 NVIDIA 企业账户</a>还是比较繁琐的。</p>
+<p>下面是国光我注册的时候填写的大概信息：</p>
+<a href="https://image.3001.net/images/20230112/16734940272580.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16734940272580.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>主要记住如下一些点：</p>
+<ol>
+<li>选择台湾地区，国光认为这是 NVIDIA 的老家，成功率应该高一点</li>
+<li>选择 IT Service 信息服务行业</li>
+<li>职位选择：学生，毕竟我是学生记得多塞 200 块钱的梗，全世界基本上如此</li>
+<li>服务器选择国内的：Lenovo、VDI 选择 RedHat 虚拟化，记得规模选择 1-99 越小越好，大规模可能真的会被电话核实</li>
+<li>总之，低调一点，毕竟我们是白嫖，不要加装自己真的是个大的企业用户就行</li>
+</ol>
+<p>注册申请提交后，可以看到大概需要 24-48 小时的时间：</p>
+<a href="https://image.3001.net/images/20230112/16734531144761.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16734531144761.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>实际上我们不需要等待 24-48 小时，顺利的话，1小时不到就可以接收到 NVIDIA 的邮件：</p>
+<a href="https://image.3001.net/images/20230112/16735038661099.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16735038661099.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>主要就是这个「NVIDIA Set Pasword」邮件， 我们点进去，选择 「SET PASSWORD」设置账户密码：</p>
+<a href="https://image.3001.net/images/20230112/16735039535250.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16735039535250.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>URL 里面会自带 Token 认证，然后我们可以直接设置我们 <strong>admin@sqlsec.com</strong> 的密码：</p>
+<a href="https://image.3001.net/images/20230112/16735040931564.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16735040931564.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>接着使用我们的账号和密码登录：<a href="https://nvid.nvidia.com/affwebservices/public/saml2sso?SPID=https://api.licensing.nvidia.com" target="_blank" rel="nofollow">NVIDIA许可门户网站</a></p>
+<p>直接打开「SOFTWARE DOWNLOADS」下载页面：<a href="https://ui.licensing.nvidia.com/software" target="_blank" rel="nofollow">https://ui.licensing.nvidia.com/software</a></p>
+<a href="https://image.3001.net/images/20230112/16735058062157.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16735058062157.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>但是筛选 VGPU 发现最新的只有 vGPU 14.4 版本的驱动，这个要吐槽一下，最新的没有直接展出出来，还需要我们手动筛选一下平台为「Linux KVM」，这就可看到最新的 v15.0 的驱动了，如果还没出现的话，我们再多添加几个条件筛选即可：</p>
+<a href="https://image.3001.net/images/20230112/16735060302823.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16735060302823.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>但是官网这个下载驱动包的链接应该是存在鉴权时间的，国光我贴到文章里面的话，后期链接失效就有的我改了：</p>
+<a href="https://image.3001.net/images/20230112/16735062347577.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16735062347577.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>那大家无法注册企业账号该怎么办呢？不要担心，我们继续往下看。</p>
+<h3>驱动分享<a href="https://pve.sqlsec.com/4/5/#_6" title="Permanent link" target="_blank" rel="nofollow">¶</a>
+</h3>
+<p>没有企业账号也没关系，网上很多热心网友也有分享过驱动的下载链接：</p>
+<ul>
+<li>
+<p><strong>佛西大佬的公开网盘</strong>：<a href="https://foxi.buduanwang.vip/pan/foxi/Virtualization/vGPU/" target="_blank" rel="nofollow">https://foxi.buduanwang.vip/pan/foxi/Virtualization/vGPU/</a></p>
+</li>
+<li>
+<p><strong>Github 的 vGPU Driver</strong>：<a href="https://github.com/VGPU-Community-Drivers/NV-VGPU-Driver/releases" target="_blank" rel="nofollow">https://github.com/VGPU-Community-Drivers/NV-VGPU-Driver/releases</a></p>
+</li>
+<li>
+<p><strong>某俄罗斯大佬的网盘 15.0 vGPU 驱动</strong>：<a href="https://nextcloud.igit.spb.ru/index.php/s/joPd9YGz65rpLjB?path=%2F" target="_blank" rel="nofollow">https://nextcloud.igit.spb.ru/index.php/s/joPd9YGz65rpLjB?path=%2F</a></p>
+</li>
+<li>
+<p><strong>国光的 OneDriver 分享的 15.0 vGPU 驱动</strong>：<a href="https://uijay-my.sharepoint.com/:u:/g/personal/aywtc_myoffice_fun/EbupgUpP9FVLjvt-zZnKxpwBIaVieiQzOh9-wJmk6Ru36A?e=SdtfqE" target="_blank" rel="nofollow">NVIDIA-GRID-Linux-KVM-525.60.12-525.60.13-527.41.zip</a></p>
+</li>
+<li>
+<p><strong>国光的度网盘分享的 15.0 vGPU 驱动</strong>：链接: <a href="https://pan.baidu.com/s/1J72clvi3IyZg-jStue2LJA?pwd=vGPU" target="_blank" rel="nofollow">https://pan.baidu.com/s/1J72clvi3IyZg-jStue2LJA?pwd=vGPU</a> 提取码: vGPU</p>
+</li>
+</ul>
+<h3>驱动安装<a href="https://pve.sqlsec.com/4/5/#_7" title="Permanent link" target="_blank" rel="nofollow">¶</a>
+</h3>
+<p>解压内容只要包含 Host 主机驱动和各个平台的客户端驱动：</p>
+<a href="https://image.3001.net/images/20230112/1673457052965.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/1673457052965.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>这里我们将 Host 驱动 NVIDIA-Linux-x86_64-525.60.12-vGPU-kvm.run 上传到 PVE 上准备安装。</p>
+<p>因为我们的 Tesla P4 是完全支持 vGPU 的：</p>
+<p>显卡原生不支持 vGPU ？ 不要慌，国光我会出手：</p>
+<p><a href="https://docs.nvidia.com/grid/gpus-supported-by-vGPU.html" target="_blank" rel="nofollow"></a></p>
+<p><a href="https://image.3001.net/images/20230112/16734578074454.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16734578074454.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a><a href="https://gitlab.com/polloloco/vGPU-proxmox" target="_blank" rel="nofollow"></a></p>
+<p>安装门槛就降低了很多我们可以直接安装：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-5-1)chmod +x NVIDIA-Linux-x86_64-525.60.12-vgpu-kvm.run  [](https://pve.sqlsec.com/4/5/#__codelineno-5-2)./NVIDIA-Linux-x86_64-525.60.12-vgpu-kvm.run --dkms</code></p>
+<p>因为国光我已经安装过了，这里提示了是否继续安装，我们选择继续安装就行了：</p>
+<a href="https://image.3001.net/images/20230112/16734917078756.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16734917078756.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>开始 Build 构建内核模块，等待完成：</p>
+<a href="https://image.3001.net/images/20230112/16734934298798.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16734934298798.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>解决安装报错：Unable to load the kernel module 'nvidia.ko'</p>
+<a href="https://image.3001.net/images/20230112/16734917203583.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16734917203583.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-6-1)</code></p>
+<p>如果构建没问题的话，后面基本上都会比较顺利，接着开始安装驱动：</p>
+<a href="https://image.3001.net/images/20230112/16734934485912.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16734934485912.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>驱动安装好后，提示：是否要注册 DKMS 模块，那肯定选择「Yes」了：</p>
+<a href="https://image.3001.net/images/20230112/16734935644529.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16734935644529.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>之后提示安装完成：</p>
+<a href="https://image.3001.net/images/20230112/16734936654058.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16734936654058.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>安装完成后重启即可生效。</p>
+<h3>验证驱动<a href="https://pve.sqlsec.com/4/5/#_8" title="Permanent link" target="_blank" rel="nofollow">¶</a>
+</h3>
+<p>通过检查内核加载模块列表中的 VFIO 驱动程序来验证 NVIDIA VGPU 软件包是否已正确安装和加载：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-7-1)lsmod |grep vfio</code> </p>
+<a href="https://image.3001.net/images/20230112/16735103197474.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16735103197474.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>查看平台中所有 NVIDIA GPU的概览信息：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-8-1)nvidia-smi</code></p>
+<p>正常识别到了我们的 Tesla P4 下显卡：</p>
+<a href="https://image.3001.net/images/20230112/16735113454307.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16735113454307.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>因为上图还显示了我们的 RTX 3060 和 GT 630 显卡，我们还可以使用下面的精简命令单独查看 vGPU 相关的显卡：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-9-1)nvidia-smi vgpu</code></p>
+<a href="https://image.3001.net/images/20230112/16735117241858.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16735117241858.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>查询我们 GPU 支持的 mdev 类型列表：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-10-1)ls /sys/class/mdev_bus/*/mdev_supported_types</code> </p>
+<p>以及这些类型可支持的 vGPU 数量：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-11-1)cat /sys/class/mdev_bus/*/mdev_supported_types/*/available_instances</code></p>
+<a href="https://image.3001.net/images/20230112/16735124355600.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16735124355600.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>以上两个命令也可以使用下面一条命令查看：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-12-1)mdevctl types</code></p>
+<a href="https://image.3001.net/images/20230112/16735379729207.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16735379729207.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>其实这块就正对应着 PVE Web UI 里面的现在这个界面：</p>
+<a href="https://image.3001.net/images/20230112/16735124942109.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230112/16735124942109.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>下表是国光整理的对这各个Tesla P4 支持的 vGPU 的 MDev 类型的解释（共支持14种类型）：</p>
+<p>类别</p>
+<p>代号</p>
+<p>最大实例数</p>
+<p>解释</p>
+<p>GRID P4-1Q</p>
+<p>nvidia-63</p>
+<p>8</p>
+<p>1GB 显存，最大分辨率为：5120x2880</p>
+<p>GRID P4-2Q</p>
+<p>nvidia-64</p>
+<p>4</p>
+<p>2GB 显存，最大分辨率为：7680x4320</p>
+<p>GRID P4-4Q</p>
+<p>nvidia-65</p>
+<p>2</p>
+<p>4GB 显存，最大分辨率为：7680x4320</p>
+<p>GRID P4-8Q</p>
+<p>nvidia-66</p>
+<p>1</p>
+<p>8GB 显存，最大分辨率为：7680x4320</p>
+<p>GRID P4-1A</p>
+<p>nvidia-67</p>
+<p>8</p>
+<p>1GB 显存，最大分辨率为：1280x1084</p>
+<p>GRID P4-2A</p>
+<p>nvidia-68</p>
+<p>4</p>
+<p>2GB 显存，最大分辨率为：1280x1084</p>
+<p>GRID P4-4A</p>
+<p>nvidia-69</p>
+<p>2</p>
+<p>4GB 显存，最大分辨率为：1280x1084</p>
+<p>GRID P4-8A</p>
+<p>nvidia-70</p>
+<p>1</p>
+<p>8GB 显存，最大分辨率为：1280x1084</p>
+<p>GRID P4-1B</p>
+<p>nvidia-71</p>
+<p>8</p>
+<p>1GB 显存，最大分辨率为：5120x2880</p>
+<p>GRID P4-1B4</p>
+<p>nvidia-243</p>
+<p>8</p>
+<p>不推荐使用，未来可能会被移除</p>
+<p>GRID P4-2B</p>
+<p>nvidia-157</p>
+<p>4</p>
+<p>2GB 显存，最大分辨率为：5120x2880</p>
+<p>GRID P4-2B4</p>
+<p>nvidia-214</p>
+<p>4</p>
+<p>不推荐使用，未来可能会被移除</p>
+<p>GRID P4-4C</p>
+<p>nvidia-288</p>
+<p>2</p>
+<p>4GB 显存，最大分辨率为：4096x2440</p>
+<p>GRID P4-8C</p>
+<p>nvidia-289</p>
+<p>1</p>
+<p>1GB 显存，最大分辨率为：4096x2440</p>
+<p>其中我们注意到了类似里面的：1、2、4、8 这几个数字，这个表示这 vGPU 的显存，所以 1 开头的可用数量为 8，毕竟 Tesla 只有 8GB 显存，这个还是比较容易理解的。肯定还有小伙伴好奇这个：A、B、C、Q 是啥意思呢？这其实代表着 vGPU 的几个不通系列，下表是 NVIDIA 官方 PDF 里面的解释：</p>
+<p>系列</p>
+<p>最大帧数</p>
+<p>解释说明</p>
+<p>Q</p>
+<p>60FPS</p>
+<p>兼顾 Quadro 技术的性能和特点</p>
+<p>C</p>
+<p>60FPS</p>
+<p>为计算密集型服务器提供高性能计算</p>
+<p>B</p>
+<p>45FPS</p>
+<p>面向业务专员和知识工作者提供虚拟桌面</p>
+<p>A</p>
+<p>60FPS</p>
+<p>提供针对虚拟机应用程序用户的应用程序流的会话相关解决方案</p>
+<p>国光小课堂：vGPU 许可证相关</p>
+<h2>vGPU 添加<a href="https://pve.sqlsec.com/4/5/#vgpu" title="Permanent link" target="_blank" rel="nofollow">¶</a>
+</h2>
+<p>通过上面的章节，我们大概了解到了 vGPU 的 MDev 类型，我们直接像添加 PCI 设备那样，给 VM 添加对应的 MDev 类型的 VGPU 即可：</p>
+<a href="https://image.3001.net/images/20230117/16739418397360.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230117/16739418397360.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>如果如果您的 PVE 服务器版本低于 7.2-4，则还得添加额外的参数到虚拟机的配置文件中才可以：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-13-1)qm set VMID -args &#039;-uuid &lt;UUID-OF-THE-MDEV&gt;&#039;</code> </p>
+<p>因为国光我的这个实验环境是 PVE 7.3 版本，所以这一步就展开说了，感兴趣的网友可以自行去谷歌一下。</p>
+<p>此时打开我们的 VM 发现并没有识别到我们的 vGPU 显卡：</p>
+<a href="https://image.3001.net/images/20230117/16739438875641.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230117/16739438875641.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>这是因为没有安装 Guest 驱动的原因，我们将 527.41_grid_win10_win11_server2019_server2022_dch_64bit_international.exe 传输到我们的 VM 里面：</p>
+<a href="https://image.3001.net/images/20230117/16739440077351.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230117/16739440077351.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>等待驱动的安装完成即可，安装的过程可以看到已经识别到了我们的 Tesla P4 显卡了：</p>
+<a href="https://image.3001.net/images/20230117/16739446224714.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230117/16739446224714.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>虽然我们的 P4 可以直接使用了，但是使用命令查看发现我们的 Lincense 依然是未激活的：</p>
+<p>Text Only</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-14-1)nvidia-smi -q |findstr Lincese</code></p>
+<a href="https://image.3001.net/images/20230117/1673947701855.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230117/1673947701855.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>使用一段时候 Windows 右下角也会弹窗提示：NVIDIA 许可证不存在</p>
+<a href="https://image.3001.net/images/20230121/16743147703234.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230121/16743147703234.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>关于这块的限制有哪些，国光我单独放到了下一小节来叙述。</p>
+<h2>vGPU 限制<a href="https://pve.sqlsec.com/4/5/#vgpu_1" title="Permanent link" target="_blank" rel="nofollow">¶</a>
+</h2>
+<p>那么肯定有小伙伴们好奇 vGPU 不存在有哪些缺点和限制呢？这块国光我测试过很多，在配合 <a href="https://www.nvidia.com/content/Control-Panel-Help/vLatest/zh-cn/mergedProjects/nvlicCHS/About_GRID_Licensing_-_Reference.htm" target="_blank" rel="nofollow">NVIDIA 官方</a> 和群友的情况下，最终也找到了一点点规律。</p>
+<p>如果不激活 vGPU 的话，随着开机运行时间的推移，帧数会逐渐下降，分为几个档位，从 60FPS 降到 15FPS 最终会非常卡顿只有 3FPS：</p>
+<a href="https://image.3001.net/images/20230121/16742665427590.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230121/16742665427590.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>而且 CUDA 功能也无法使用，为了验证 CUDA 是否正常使用，我们首先安装 <a href="https://developer.nvidia.com/cuda-downloads" target="_blank" rel="nofollow">NVIDIA CUDA 工具包</a>，虽然 GPU-Z 软件显示支持 CUDA，但是如果未激活长时间使用的话，通过 N 卡官方的 dmeo （注意自己版本的路径）测试并不能顺利运行：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-15-1)&quot;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.0\extras\demo_suite\bandwidthTest.exe&quot;</code></p>
+<p>如果最后都显示 <strong>Result = PASS</strong> 则说明 CUDA 安装成功且正常工作。</p>
+<a href="https://image.3001.net/images/20230121/16742672405509.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230121/16742672405509.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>所以 demo 里面调用 CUDA 的 exe 测试小程序也无法正常运行：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-16-1)&quot;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.0\extras\demo_suite\oceanFFT.exe&quot;</code></p>
+<a href="https://image.3001.net/images/20230121/16742673416042.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230121/16742673416042.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<h2>vGPU 激活<a href="https://pve.sqlsec.com/4/5/#vgpu_2" title="Permanent link" target="_blank" rel="nofollow">¶</a>
+</h2>
+<h3>安装容器<a href="https://pve.sqlsec.com/4/5/#_9" title="Permanent link" target="_blank" rel="nofollow">¶</a>
+</h3>
+<p>vGPU 目前国外已经有成熟的 <a href="https://gitea.publichub.eu/oscar.krause/fastapi-dls" target="_blank" rel="nofollow">fastapi-dls 开源项目</a>可以直接使用了，官方还贴心了封装了 docker 容器。</p>
+<p>DockerHub 的 fastapi-dls 的容器地址是：<a href="https://hub.docker.com/r/collinwebdesigns/fastapi-dls" target="_blank" rel="nofollow">https://hub.docker.com/r/collinwebdesigns/fastapi-dls</a></p>
+<p>根据官方的 README 来创建容器：</p>
+<p>Bash</p>
+<p><code><code>[](https://pve.sqlsec.com/4/5/#__codelineno-17-1)# 设定工作目录并创建 [](https://pve.sqlsec.com/4/5/#__codelineno-17-2)WORKING_DIR=/opt/docker/fastapi-dls/cert [](https://pve.sqlsec.com/4/5/#__codelineno-17-3)mkdir -p $WORKING_DIR [](https://pve.sqlsec.com/4/5/#__codelineno-17-4) [](https://pve.sqlsec.com/4/5/#__codelineno-17-5)# 生成相关证书 [](https://pve.sqlsec.com/4/5/#__codelineno-17-6)cd $WORKING_DIR [](https://pve.sqlsec.com/4/5/#__codelineno-17-7)openssl genrsa -out $WORKING_DIR/instance.private.pem 2048  [](https://pve.sqlsec.com/4/5/#__codelineno-17-8)openssl rsa -in $WORKING_DIR/instance.private.pem -outform PEM -pubout -out $WORKING_DIR/instance.public.pem [](https://pve.sqlsec.com/4/5/#__codelineno-17-9)openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout  $WORKING_DIR/webserver.key -out $WORKING_DIR/webserver.crt [](https://pve.sqlsec.com/4/5/#__codelineno-17-10) [](https://pve.sqlsec.com/4/5/#__codelineno-17-11)# 创建容器的官方建议命令 [](https://pve.sqlsec.com/4/5/#__codelineno-17-12)docker run -e DLS_URL=</code>hostname -i<code> -e DLS_PORT=443 -p 443:443 -v $WORKING_DIR:/app/cert collinwebdesigns/fastapi-dls:latest</code></code></p>
+<p>Docker 启动相关的其他相关的变量</p>
+<p><a href="https://docs.sqlalchemy.org/en/14/core/engines.html" target="_blank" rel="nofollow"></a></p>
+<p>实际上我们主要关注一下 <strong>DLS_URL</strong> 参数，换成自己的 Guest 来宾客户端可以访问到的 IP 地址即可，然后改一下授权时间为 1825 天（5年），下面是国光我最终的创建容器的命令：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-18-1)docker run -e LEASE_EXPIRE_DAYS=1825 -e DLS_URL=192.168.1.6 -e DLS_PORT=443 -p 443:443 -v $WORKING_DIR:/app/cert collinwebdesigns/fastapi-dls:latest</code></p>
+<p>docker run  --restart=always -e LEASE_EXPIRE_DAYS=1825 -e DLS_URL=192.168.1.136 -e DLS_PORT=443 -p 443:443 makedie/fastapi-dls:latest`</p>
+<a href="https://image.3001.net/images/20230122/16744029981822.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230122/16744029981822.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<h3>容器接口<a href="https://pve.sqlsec.com/4/5/#_10" title="Permanent link" target="_blank" rel="nofollow">¶</a>
+</h3>
+<p>下表只列出了主要的接口，更详细的接口可以参考 <code>/-/docs</code> 和 <code>/-/redoc</code> 的 PATH 接口文档。</p>
+<p>请求方法</p>
+<p>PATH</p>
+<p>解释说明</p>
+<p>GTE</p>
+<p><code>/</code></p>
+<p>重定向到 <code>/-/readme</code></p>
+<p>GTE</p>
+<p><code>/-/health</code></p>
+<p>用于运行状况检查，还显示当前版本和提交哈希。</p>
+<p>GTE</p>
+<p><code>/-/readme</code></p>
+<p>HTML 页面展示 README.md</p>
+<p>GTE</p>
+<p><code>/-/docs</code></p>
+<p><code>GET /-/openapi.json</code> 展示 Swagger UI 页面的接口文档</p>
+<p>GTE</p>
+<p><code>/-/redoc</code></p>
+<p><code>GET /-/openapi.json</code> 展示 ReDoc 页面的接口文档</p>
+<p>GTE</p>
+<p><code>/-/manage</code></p>
+<p>显示用于删除源或租约的非常基本的 UI</p>
+<p>GTE</p>
+<p><code>/-/origins?leases=false</code></p>
+<p>列出注册的原产地，origin 参数指的是包括每个租约的引用源</p>
+<p>DELETE</p>
+<p><code>/-/origins</code></p>
+<p>删除所有源及其租约</p>
+<p>GTE</p>
+<p><code>/-/leases?origin=false</code></p>
+<p>列出当前租约，origin 参数指的是包括每个租约的引用源</p>
+<p>DELETE</p>
+<p><code>/-/lease/{lease_ref}</code></p>
+<p>删除租约</p>
+<p>GTE</p>
+<p><code>/client-token</code></p>
+<p>生成客户端令牌</p>
+<h3>续约授权<a href="https://pve.sqlsec.com/4/5/#_11" title="Permanent link" target="_blank" rel="nofollow">¶</a>
+</h3>
+<ul>
+<li><strong>Windows</strong></li>
+</ul>
+<p>首先请求生成客户端令牌的接口 <code>/client-token</code> 拿到授权文件：</p>
+<a href="https://image.3001.net/images/20230123/1674403947856.jpg" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230123/1674403947856.jpg" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>然后放入到下面的路径：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-19-1)C:\Program Files\NVIDIA Corporation\vGPU Licensing\ClientConfigToken</code></p>
+<a href="https://image.3001.net/images/20230123/1674404441119.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230123/1674404441119.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>重启电脑即可看到我们的 Guest 来宾客户端已经正常拿到授权了：</p>
+<a href="https://image.3001.net/images/20230123/16744045737305.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230123/16744045737305.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<p>也可以使用命令行查看授权细节：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-20-1)nvidia-smi -q |findstr Lincese</code></p>
+<a href="https://image.3001.net/images/20230123/16744046808482.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230123/16744046808482.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<ul>
+<li><strong>Linux</strong></li>
+</ul>
+<p>Linux 使用下面命令下载授权文件到 <code>/etc/nvidia/ClientConfigToken/</code> 下然后重启服务即可：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-21-1)# 下载授权文件 [](https://pve.sqlsec.com/4/5/#__codelineno-21-2)curl --insecure -X GET https://&lt;dls-hostname-or-ip&gt;/client-token -o /etc/nvidia/ClientConfigToken/client_configuration_token.tok [](https://pve.sqlsec.com/4/5/#__codelineno-21-3)service nvidia-gridd restart [](https://pve.sqlsec.com/4/5/#__codelineno-21-4) [](https://pve.sqlsec.com/4/5/#__codelineno-21-5)# 查看授权细节 [](https://pve.sqlsec.com/4/5/#__codelineno-21-6)nvidia-smi -q | grep &quot;License&quot;</code></p>
+<h3>新的姿势<a href="https://pve.sqlsec.com/4/5/#_12" title="Permanent link" target="_blank" rel="nofollow">¶</a>
+</h3>
+<p>官方的 Docker 镜像好像有一点更新，重新补充一下新的方法和姿势。</p>
+<p>Bash</p>
+<p><code><code>[](https://pve.sqlsec.com/4/5/#__codelineno-22-1)# 拉取最新镜像 [](https://pve.sqlsec.com/4/5/#__codelineno-22-2)docker pull collinwebdesigns/fastapi-dls:latest [](https://pve.sqlsec.com/4/5/#__codelineno-22-3) [](https://pve.sqlsec.com/4/5/#__codelineno-22-4)# 创建目录 [](https://pve.sqlsec.com/4/5/#__codelineno-22-5)mkdir -p /opt/docker/fastapi-dls/cert [](https://pve.sqlsec.com/4/5/#__codelineno-22-6)cd /opt/docker/fastapi-dls/cert [](https://pve.sqlsec.com/4/5/#__codelineno-22-7) [](https://pve.sqlsec.com/4/5/#__codelineno-22-8)# 为 JWT 签名生成公私钥 [](https://pve.sqlsec.com/4/5/#__codelineno-22-9)openssl genrsa -out /opt/docker/fastapi-dls/cert/instance.private.pem 2048  [](https://pve.sqlsec.com/4/5/#__codelineno-22-10)openssl rsa -in /opt/docker/fastapi-dls/cert/instance.private.pem -outform PEM -pubout -out /opt/docker/fastapi-dls/cert/instance.public.pem [](https://pve.sqlsec.com/4/5/#__codelineno-22-11) [](https://pve.sqlsec.com/4/5/#__codelineno-22-12)# 为 Web 服务器生成 SSL 证书 [](https://pve.sqlsec.com/4/5/#__codelineno-22-13)openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout  /opt/docker/fastapi-dls/cert/webserver.key -out /opt/docker/fastapi-dls/cert/webserver.crt [](https://pve.sqlsec.com/4/5/#__codelineno-22-14) [](https://pve.sqlsec.com/4/5/#__codelineno-22-15)# 配置创建容器 </code>hostname -i<code> 换成自己的 IP 即可 [](https://pve.sqlsec.com/4/5/#__codelineno-22-16)docker volume create dls-db [](https://pve.sqlsec.com/4/5/#__codelineno-22-17)docker run -d --restart=always -e LEASE_EXPIRE_DAYS=1825 -e DLS_URL=</code>hostname -i<code> -e DLS_PORT=443 -p 443:443 -v /opt/docker/fastapi-dls/cert:/app/cert -v dls-db:/app/database collinwebdesigns/fastapi-dls:latest</code></code></p>
+<ul>
+<li><strong>Linux 客户端激活</strong></li>
+</ul>
+<p>然后 Linux 客户端使用下面命令下载导入许可到<code>/etc/nvidia/ClientConfigToken</code> 文件夹中：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-23-1)curl --insecure -L -X GET https://&lt;dls-hostname-or-ip&gt;/-/client-token -o /etc/nvidia/ClientConfigToken/client_configuration_token_$(date &#039;+%d-%m-%Y-%H-%M-%S&#039;).tok [](https://pve.sqlsec.com/4/5/#__codelineno-23-2)# 或者 [](https://pve.sqlsec.com/4/5/#__codelineno-23-3)wget --no-check-certificate -O /etc/nvidia/ClientConfigToken/client_configuration_token_$(date &#039;+%d-%m-%Y-%H-%M-%S&#039;).tok https://&lt;dls-hostname-or-ip&gt;/-/client-token</code></p>
+<p>接着重启 nvidia-gridd service 服务：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-24-1)service nvidia-gridd restart</code></p>
+<ul>
+<li><strong>Windows 客户端激活</strong></li>
+</ul>
+<p>使用管理员权限运行 Powershell，使用下面命令导入许可到 <code>C:\Program Files\NVIDIA Corporation\vGPU Licensing\ClientConfigToken</code>文件夹中：</p>
+<p>Text Only</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-25-1)curl.exe --insecure -L -X GET https://&lt;dls-hostname-or-ip&gt;/-/client-token -o &quot;C:\Program Files\NVIDIA Corporation\vGPU Licensing\ClientConfigToken\client_configuration_token_$($(Get-Date).tostring(&#039;dd-MM-yy-hh-mm-ss&#039;)).tok&quot;</code></p>
+<p>curl.exe --insecure -L -X GET <a href="https://192.168.1.136/client-token" target="_blank" rel="nofollow">https://192.168.1.136/client-token</a> -o &quot;C:\Program Files\NVIDIA Corporation\vGPU Licensing\ClientConfigToken\client_configuration<em>token</em>$($(Get-Date).tostring('dd-MM-yy-hh-mm-ss')).tok&quot;<br>
+接着重启 NVDisplay.ContainerLocalSystem 服务：</p>
+<p>Bash</p>
+<p><code>[](https://pve.sqlsec.com/4/5/#__codelineno-26-1)Restart-Service NVDisplay.ContainerLocalSystem</code></p>
+<a href="https://image.3001.net/images/20230316/16789483511337.png" alt="国光的vGPU教程" data-fancybox="images" data-caption="国光的vGPU教程" target="_blank" rel="nofollow"><img decoding="async" data-src="https://image.3001.net/images/20230316/16789483511337.png" src="http://158666.xyz/$loadimg_url" alt="国光的vGPU教程"></a>
+<h2>参考链接<a href="https://pve.sqlsec.com/4/5/#_13" title="Permanent link" target="_blank" rel="nofollow">¶</a>
+</h2>
+<ul>
+<li><a href="http://www.vgpu.com.cn/" target="_blank" rel="nofollow">vGPU资源信息</a></li>
+<li><a href="https://pve.proxmox.com/wiki/NVIDIA_vGPU_on_Proxmox_VE_7.x" target="_blank" rel="nofollow">NVIDIA vGPU on Proxmox VE 7.x</a></li>
+<li><a href="https://gitlab.com/polloloco/vGPU-proxmox" target="_blank" rel="nofollow">PolloLoco / NVIDIA vGPU Guide · GitLab</a></li>
+<li><a href="https://foxi.buduanwang.vip/virtualization/pve/2195.html/" target="_blank" rel="nofollow">佛西博客 - 来自民间的vGPU授权fastapi-dls</a></li>
+<li><a href="https://hczhang.cn/cloud_computing/apply-for-nvidia-vgpu-license.html" target="_blank" rel="nofollow">申请NVIDIA vGPU License - hczhang.cn</a></li>
+<li><a href="https://hczhang.cn/cloud_computing/deploy-nvidia-vgpu-license-server.html" target="_blank" rel="nofollow">部署NVIDIA vGPU License Server - hczhang.cn</a></li>
+<li><a href="https://hczhang.cn/cloud_computing/config-nvidia-license-server.html" target="_blank" rel="nofollow">配置NVIDIA License Server - hczhang.cn</a></li>
+<li><a href="https://git.collinwebdesigns.de/oscar.krause/fastapi-dls" target="_blank" rel="nofollow">https://git.collinwebdesigns.de/oscar.krause/fastapi-dls</a></li>
+<li><a href="https://gitea.publichub.eu/oscar.krause/fastapi-dls" target="_blank" rel="nofollow">https://gitea.publichub.eu/oscar.krause/fastapi-dls</a></li>
+<li><a href="https://hub.docker.com/r/collinwebdesigns/fastapi-dls" target="_blank" rel="nofollow">https://hub.docker.com/r/collinwebdesigns/fastapi-dls</a></li>
+</ul>
+					    	        </div>
+			
+				<div class="tags my-2">
+									</div>
+    	        			     
+				    	    </div>
+			</div>
+    	    <div class="single-top-area text-sm clearfix card mt-4">
+					
+    	    	<div class="card-body"> 
+    	            <strong>版权声明：</strong><a href="http://158666.xyz/author/2" title="导航站">xonec</a> 发表于 2023-06-12 18:22:06。<br>
+    	            <strong>转载请注明：</strong><a href="http://158666.xyz/1120.html" rel="bookmark" title="本文固定链接 https://dh.158666.xyz/1120.html">国光的vGPU教程 | 导航站</a>
+    	    	</div>
+					
+    	    </div>
+    	    <div class="near-navigation rounded mt-4 py-2">
+    	    	    	    	    	    	<div class="nav previous border-right border-color">
+    	            <a class="near-permalink" href="http://158666.xyz/1118.html">
+    	    		<span>上一篇</span>
+    	    		<h4 class="near-title">PVE的优化过程</h4>
+    	    		</a>
+    	    	</div>
+    	    	    	    	    	    	<div class="nav next border-left border-color">
+    	    		<a class="near-permalink" href="http://158666.xyz/1122.html">
+    	    		<span>下一篇</span>
+    	            <h4 class="near-title">在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化</h4>
+    	        </a>
+    	    	</div>
+    	    	    	    </div>
+    	    
+<!-- comments -->
+<div id="comments" class="comments">
+	<h1 id="comments-list-title" class="comments-title h5 mx-1 my-4">
+		<i class="iconfont icon-comment"></i>
+		<span class="noticom">
+			<a href="http://158666.xyz/1120.html#respond" class="comments-title">暂无评论</a> 
+		</span>
+	</h1> 
+	<div class="card">
+		<div class="card-body"> 
+						<div id="respond_box">
+				<div id="respond" class="comment-respond">
+					    				<form action="https://dh.158666.xyz/wp-comments-post.php" method="post" id="commentform" class="text-sm mb-4">	
+						<div class="visitor-avatar d-flex flex-fill mb-2">
+														<img class="v-avatar rounded-circle" src="http://158666.xyz/wp-content/themes/webstackpro/images/gravatar.jpg">
+													</div> 
+						<div class="comment-textarea mb-3">
+							<textarea name="comment" id="comment" class="form-control" placeholder="输入评论内容..." tabindex="4" cols="50" rows="3"></textarea>
+						</div>
+							
+						<div id="comment-author-info" class="row  row-sm">
+							<div class="col-sm-6 col-lg-4 mb-3"><input type="text" name="author" id="author" class="form-control" value="" size="22" placeholder="昵称" tabindex="2"></div>	
+							<div class="col-sm-6 col-lg-4 mb-3"><input type="text" name="email" id="email" class="form-control" value="" size="22" placeholder="邮箱" tabindex="3"></div>
+							<div class="col-sm-12 col-lg-4 mb-3"><input type="text" name="url" id="url" class="form-control" value="" size="22" placeholder="网址" tabindex="4"></div>
+						</div>
+												<div class="com-footer text-right">
+							<input type="hidden" id="_wpnonce" name="_wpnonce" value="a13019c435"><input type="hidden" name="_wp_http_referer" value="/1120.html?simply_static_page=37">							<a rel="nofollow" id="cancel-comment-reply-link" style="display: none;" href="javascript:;" class="btn btn-light custom_btn-outline mx-2">再想想</a>
+														<input class="btn btn-dark custom_btn-d" name="submit" type="submit" id="submit" tabindex="5" value="发表评论">
+														<input type="hidden" name="comment_post_ID" value="1120" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+						</div>
+						    				</form>
+					<div class="clear"></div>
+    				  				</div>
+  			</div>	
+						<div id="loading-comments"><span></span></div>
+						<div class="not-comment card"><div class="card-body nothing text-center color-d">暂无评论...</div></div>
+					
+		</div>	
+	</div>
+</div>
+<!-- comments end -->
+		</div> 
+		<div class="sidebar col-lg-4 pl-xl-4 d-none d-lg-block">
+			
+
+	
+			<div id="about_author-7" class="card about_author">
+		
+	<div class="widget-author-cover">
+		<div class="media media-2x1">
+                        <div class="media-content" data-src="https://i.loli.net/2020/01/11/wHoOcfQGhqvlUkd.jpg"></div>
+            		</div>
+		<div class="widget-author-avatar">  
+			<div class="flex-avatar"> 
+			<img alt="" src="https://cn.gravatar.com/avatar/6da082c2b9cf56fb1cfaacd00fbc7b51?s=80&#038;d=retro&#038;r=g" srcset="https://cn.gravatar.com/avatar/6da082c2b9cf56fb1cfaacd00fbc7b51?s=160&#038;d=retro&#038;r=g 2x" class="avatar avatar-80 photo" height="80" width="80" decoding="async">	 
+	  		</div>	 
+	  	</div>
+  	</div>
+    <div class="widget-author-meta text-center p-4">
+      	<div class="h6 mb-3">xonec<small class="d-block">
+			<span class="badge badge-outline-primary mt-2">
+			    博主			</span></small>
+		</div>
+      	<div class="desc text-xs mb-3 overflowClip_2"></div>
+	    <div class="row no-gutters text-center">
+	      	<a href="http://158666.xyz/author/2" target="_blank" class="col">
+	        	<span class="font-theme font-weight-bold text-md">9</span><small class="d-block text-xs text-muted">文章</small>
+	      	</a>
+	      	<a href="http://158666.xyz/author/2" target="_blank" class="col">
+	        	<span class="font-theme font-weight-bold text-md">0</span><small class="d-block text-xs text-muted">评论</small>
+	      	</a>
+	      	<a href="http://158666.xyz/author/2" target="_blank" class="col">
+	        	<span class="font-theme font-weight-bold text-md">34,278</span><small class="d-block text-xs text-muted">浏览</small>
+	      	</a>
+	      	<a href="http://158666.xyz/author/2" target="_blank" class="col">
+	        	<span class="font-theme font-weight-bold text-md">2,797</span><small class="d-block text-xs text-muted">获赞</small>
+	      	</a>
+	    </div>
+	</div>
+
+	
+	</div>
+<div id="hot_comment-12" class="card hot_comment">
+<div class="card-header widget-header"><span><i class="mr-2 iconfont icon-hot"></i>热评文章</span></div>
+	
+	<div class="card-body"> 
+		<div class="list-grid list-rounded my-n2">
+				
+								<div class="list-item py-2">
+										<div class="media media-3x2 rounded col-4 mr-3">
+            	                    	        <a class="media-content" href="http://158666.xyz/1128.html" title="hexo+netlify+Qexo后端+github自动化" data-src="https://b2.kwxn.eu.org/hexonews/2022/12/d78fdf0a560ca5ccdef4aea9e7561188.jpg"></a>
+            	        					</div>
+										<div class="list-content py-0">
+						<div class="list-body">
+							<a href="http://158666.xyz/1128.html" class="list-title overflowClip_2" rel="bookmark">hexo+netlify+Qexo后端+github自动化</a>
+						</div>
+						<div class="list-footer">
+							<div class="d-flex flex-fill text-muted text-xs">
+								<time class="d-inline-block">5小时前</time>
+								<div class="flex-fill"></div>
+								<span class="discuss"><i class="iconfont icon-comment"></i> 0</span>
+							</div>
+						</div>
+					</div>
+				</div> 
+								<div class="list-item py-2">
+										<div class="media media-3x2 rounded col-4 mr-3">
+            	                    	        <a class="media-content" href="http://158666.xyz/1114.html" title="群晖docker部署bitwarden(vaultwarden)、反向代理与浏览器、iOS设置" data-src="https://picoe.oss-cn-hangzhou.aliyuncs.com/img/638ad47808074742.png_e1080.jpg"></a>
+            	        					</div>
+										<div class="list-content py-0">
+						<div class="list-body">
+							<a href="http://158666.xyz/1114.html" class="list-title overflowClip_2" rel="bookmark">群晖docker部署bitwarden(vaultwarden)、反向代理与浏览器、iOS设置</a>
+						</div>
+						<div class="list-footer">
+							<div class="d-flex flex-fill text-muted text-xs">
+								<time class="d-inline-block">5小时前</time>
+								<div class="flex-fill"></div>
+								<span class="discuss"><i class="iconfont icon-comment"></i> 0</span>
+							</div>
+						</div>
+					</div>
+				</div> 
+								<div class="list-item py-2">
+										<div class="media media-3x2 rounded col-4 mr-3">
+            	                    	        <a class="media-content" href="http://158666.xyz/1116.html" title="PVE的local和local-lvm" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2021/09/QQ%E6%88%AA%E5%9B%BE20210927104722.png"></a>
+            	        					</div>
+										<div class="list-content py-0">
+						<div class="list-body">
+							<a href="http://158666.xyz/1116.html" class="list-title overflowClip_2" rel="bookmark">PVE的local和local-lvm</a>
+						</div>
+						<div class="list-footer">
+							<div class="d-flex flex-fill text-muted text-xs">
+								<time class="d-inline-block">5小时前</time>
+								<div class="flex-fill"></div>
+								<span class="discuss"><i class="iconfont icon-comment"></i> 0</span>
+							</div>
+						</div>
+					</div>
+				</div> 
+								<div class="list-item py-2">
+										<div class="media media-3x2 rounded col-4 mr-3">
+            	                    	        <a class="media-content" href="http://158666.xyz/1118.html" title="PVE的优化过程" data-src="https://i.loli.net/2020/01/16/uS1vfU5a3TC9kYe.jpg"></a>
+            	        					</div>
+										<div class="list-content py-0">
+						<div class="list-body">
+							<a href="http://158666.xyz/1118.html" class="list-title overflowClip_2" rel="bookmark">PVE的优化过程</a>
+						</div>
+						<div class="list-footer">
+							<div class="d-flex flex-fill text-muted text-xs">
+								<time class="d-inline-block">5小时前</time>
+								<div class="flex-fill"></div>
+								<span class="discuss"><i class="iconfont icon-comment"></i> 0</span>
+							</div>
+						</div>
+					</div>
+				</div> 
+								<div class="list-item py-2">
+										<div class="media media-3x2 rounded col-4 mr-3">
+            	                    	        <a class="media-content" href="http://158666.xyz/1120.html" title="国光的vGPU教程" data-src="https://image.3001.net/images/20230112/16734940272580.png"></a>
+            	        					</div>
+										<div class="list-content py-0">
+						<div class="list-body">
+							<a href="http://158666.xyz/1120.html" class="list-title overflowClip_2" rel="bookmark">国光的vGPU教程</a>
+						</div>
+						<div class="list-footer">
+							<div class="d-flex flex-fill text-muted text-xs">
+								<time class="d-inline-block">5小时前</time>
+								<div class="flex-fill"></div>
+								<span class="discuss"><i class="iconfont icon-comment"></i> 0</span>
+							</div>
+						</div>
+					</div>
+				</div> 
+									</div>
+	</div>
+
+	</div>
+<div id="hot_post_img-3" class="card hot_post_img">
+<div class="card-header widget-header"><span><i class="mr-2 iconfont icon-chart-pc"></i>热门文章</span></div>
+	
+	
+	<div class="card-body"> 
+		<div class="list-grid list-rounded my-n2">
+		    		</div>
+	</div>
+
+	</div>
+<div id="cx_tag_cloud-8" class="card cx_tag_cloud">
+<div class="card-header widget-header"><span><i class="mr-2 iconfont icon-tags"></i>热门标签</span></div> 
+		
+		<div class="card-body">
+		<div class="tags text-justify">
+			 
+				<a href="http://158666.xyz/apptag/yizhi" title="益智" class="tag-yizhi color-8">
+				益智<span>(3)</span></a>
+			 
+				<a href="http://158666.xyz/apptag/%e7%a4%be%e4%ba%a4" title="社交" class="tag-%e7%a4%be%e4%ba%a4 color-1">
+				社交<span>(1)</span></a>
+			 
+				<a href="http://158666.xyz/apptag/jiemi" title="解密" class="tag-jiemi color-1">
+				解密<span>(1)</span></a>
+			 
+				<a href="http://158666.xyz/apptag/xiuxian" title="休闲" class="tag-xiuxian color-1">
+				休闲<span>(1)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e6%a0%b8%e6%b3%84%e6%bc%8f" title="核泄漏" class="tag-%e6%a0%b8%e6%b3%84%e6%bc%8f color-2">
+				核泄漏<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e5%81%a5%e5%ba%b7" title="健康" class="tag-%e5%81%a5%e5%ba%b7 color-5">
+				健康<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e7%94%9f%e5%91%bd%e8%b5%b7%e6%ba%90" title="生命起源" class="tag-%e7%94%9f%e5%91%bd%e8%b5%b7%e6%ba%90 color-6">
+				生命起源<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e6%9c%9b%e8%bf%9c%e9%95%9c" title="望远镜" class="tag-%e6%9c%9b%e8%bf%9c%e9%95%9c color-1">
+				望远镜<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e9%bb%91%e6%b4%9e" title="黑洞" class="tag-%e9%bb%91%e6%b4%9e color-3">
+				黑洞<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e7%89%9b%e9%a1%bf" title="牛顿" class="tag-%e7%89%9b%e9%a1%bf color-4">
+				牛顿<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e5%8a%9b%e5%ad%a6" title="力学" class="tag-%e5%8a%9b%e5%ad%a6 color-2">
+				力学<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e5%bc%95%e5%8a%9b%e6%b3%a2" title="引力波" class="tag-%e5%bc%95%e5%8a%9b%e6%b3%a2 color-0">
+				引力波<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e5%ae%87%e5%ae%99" title="宇宙" class="tag-%e5%ae%87%e5%ae%99 color-7">
+				宇宙<span>(0)</span></a>
+			 
+		</div>
+		</div>
+
+	</div>	
+	
+		</div>
+	</div> 
+</div>
+             
+            <footer class="main-footer footer-type-1 text-xs">
+                <div id="footer-tools" class="d-flex flex-column">
+                    <a href="javascript:" id="go-to-up" class="btn rounded-circle go-up m-1" rel="go-top">
+                        <i class="iconfont icon-to-up"></i>
+                    </a>
+                                                            <a href="javascript:" id="switch-mode" class="btn rounded-circle switch-dark-mode m-1" data-toggle="tooltip" data-placement="left" title="夜间模式">
+                        <i class="mode-ico iconfont icon-light"></i>
+                    </a>
+                </div>
+                <div class="footer-inner">
+                    <div class="footer-text">
+                                                Copyright © 2023 导航站                         &nbsp;&nbsp;Design by <a href="https://www.iowen.cn/" target="_blank"><strong>一为</strong></a>&nbsp;&nbsp;                                            </div>
+                </div>
+            </footer>
+        </div>
+<!-- main-content end -->
+    </div>
+<!-- page-container end -->
+<script type="text/javascript" id="popper-js-extra">
+/* <![CDATA[ */
+var theme = {"ajaxurl":"http:\/\/158666.xyz\/wp-admin\/admin-ajax.php","addico":"http:\/\/158666.xyz\/wp-content\/themes\/webstackpro\/images\/add.png","order":"desc","formpostion":"top","defaultclass":"","isCustomize":"","icourl":"https:\/\/api.iowen.cn\/favicon\/","icopng":".png","urlformat":"1","customizemax":"10","newWindow":"1","lazyload":"1","minNav":"","loading":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/popper.min.js?ver=2.0406" id="popper-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/bootstrap.min.js?ver=2.0406" id="bootstrap-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/theia-sticky-sidebar.js?ver=2.0406" id="sidebar-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/lazyload.min.js?ver=2.0406" id="lazyload-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/jquery.fancybox.min.js?ver=2.0406" id="lightbox-js-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/app.js?ver=2.0406" id="appjs-js"></script>
+<script type="text/javascript" src="https://ssl.captcha.qq.com/TCaptcha.js?ver=2.0406" id="captcha-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-includes/js/comment-reply.min.js?ver=6.2.2" id="comment-reply-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/comments-ajax.js?ver=2.0406" id="comments-ajax-js"></script>
+    <script type="text/javascript">$(document).on('click','a.smooth-n',function(ev) {
+        ev.preventDefault();
+        $("html, body").animate({
+            scrollTop: $($(this).attr("href")).offset().top - 90
+        }, {
+            duration: 500,
+            easing: "swing"
+        });
+    });</script>
+<!-- 自定义代码 -->
+<!-- end 自定义代码 -->
+</body>
+</html>

@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化 | 导航站</title>
+<meta name="theme-color" content="#2C2E2F">
+<meta name="keywords">
+<meta name="description" content="下图是NvidiavGPU的原理。在宿主机上安装vGPU驱动，使用nvidiavGPU管理器控制vGPU，随后创建多个mdev设备，也就是vGPU，用于直通到虚拟机，虚拟机使用Nvidia驱动用于驱动vGPU。有点类似gvt-g。不过这里最重要的是...">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://158666.xyz/1122.html"> 
+<meta property="og:title" content="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化 | 导航站">
+<meta property="og:description" content="下图是NvidiavGPU的原理。在宿主机上安装vGPU驱动，使用nvidiavGPU管理器控制vGPU，随后创建多个mdev设备，也就是vGPU，用于直通到虚拟机，虚拟机使用Nvidia驱动用于驱动vGPU。有点类似gvt-g。不过这里最重要的是...">
+<meta property="og:image" content="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220426-164428.png">
+<meta property="og:site_name" content="导航站">
+<link rel="shortcut icon" href="http://158666.xyz/wp-content/themes/webstackpro/images/favicon.png">
+<link rel="apple-touch-icon" href="http://158666.xyz/wp-content/themes/webstackpro/images/app-ico.png">
+<meta name="robots" content="noindex, nofollow">
+<link rel="dns-prefetch" href="//ssl.captcha.qq.com">
+<link rel="dns-prefetch" href="//use.fontawesome.com">
+<link rel="stylesheet" id="wp-block-library-css" href="http://158666.xyz/wp-includes/css/dist/block-library/style.min.css?ver=6.2.2" type="text/css" media="all">
+<link rel="stylesheet" id="classic-theme-styles-css" href="http://158666.xyz/wp-includes/css/classic-themes.min.css?ver=6.2.2" type="text/css" media="all">
+<style id="global-styles-inline-css" type="text/css">body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--duotone--dark-grayscale: url('#wp-duotone-dark-grayscale');--wp--preset--duotone--grayscale: url('#wp-duotone-grayscale');--wp--preset--duotone--purple-yellow: url('#wp-duotone-purple-yellow');--wp--preset--duotone--blue-red: url('#wp-duotone-blue-red');--wp--preset--duotone--midnight: url('#wp-duotone-midnight');--wp--preset--duotone--magenta-yellow: url('#wp-duotone-magenta-yellow');--wp--preset--duotone--purple-green: url('#wp-duotone-purple-green');--wp--preset--duotone--blue-orange: url('#wp-duotone-blue-orange');--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}body .is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}body .is-layout-flex{flex-wrap: wrap;align-items: center;}body .is-layout-flex > *{margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+.wp-block-navigation a:where(:not(.wp-element-button)){color: inherit;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}
+.wp-block-pullquote{font-size: 1.5em;line-height: 1.6;}</style>
+<link rel="stylesheet" id="iconfont-css" href="http://158666.xyz/wp-content/themes/webstackpro/css/iconfont.css?ver=2.0406" type="text/css" media="all">
+<link rel="stylesheet" id="font-awesome-css" href="//use.fontawesome.com/releases/v5.13.0/css/all.css?ver=2.0406" type="text/css" media="all">
+<link rel="stylesheet" id="font-awesome4-css" href="//use.fontawesome.com/releases/v5.13.0/css/v4-shims.css?ver=2.0406" type="text/css" media="all">
+<link rel="stylesheet" id="bootstrap-css" href="http://158666.xyz/wp-content/themes/webstackpro/css/bootstrap.min.css?ver=2.0406" type="text/css" media="all">
+<link rel="stylesheet" id="lightbox-css" href="http://158666.xyz/wp-content/themes/webstackpro/css/jquery.fancybox.min.css?ver=2.0406" type="text/css" media="all">
+<link rel="stylesheet" id="style-css" href="http://158666.xyz/wp-content/themes/webstackpro/css/style.css?ver=2.0406" type="text/css" media="all">
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/jquery.min.js?ver=2.0406" id="jquery-js"></script>
+<link rel="canonical" href="http://158666.xyz/1122.html">
+<link rel="alternate" type="application/json+oembed" href="http://158666.xyz/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fhttp%3A%2F%2F158666.xyz%2F1122.html">
+<link rel="alternate" type="text/xml+oembed" href="http://158666.xyz/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fhttp%3A%2F%2F158666.xyz%2F1122.html#038;format=xml">
+<meta name="bmi-version" content="1.2.9">
+</head> 
+<body class="io-black-mode">
+   <div class="page-container">
+      
+
+        <div id="sidebar" class="sticky sidebar-nav fade ">
+            <div class="modal-dialog h-100  sidebar-nav-inner">
+                <div class="sidebar-logo border-bottom border-color">
+                    <!-- logo -->
+                    <div class="logo overflow-hidden">
+                        <a href="http://158666.xyz/" class="logo-expanded">
+                            <img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo_l@2x.png" height="40" class="d-none" alt="导航站">
+						    <img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo@2x.png" height="40" alt="导航站">
+                        </a>
+                        <a href="http://158666.xyz/" class="logo-collapsed">
+                            <img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo-dark_collapsed@2x.png" height="40" class="d-none" alt="导航站">
+						    <img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo-collapsed@2x.png" height="40" alt="导航站">
+                        </a>
+                    </div>
+                    <!-- logo end -->
+                </div>
+                <div class="sidebar-menu flex-fill">
+                    <div class="sidebar-scroll">
+                        <div class="sidebar-menu-inner">
+                            <ul>
+                                                                        <li class="sidebar-item">
+                                                <a href="http://158666.xyz/#search" class="smooth">
+                                                   <i class="iconfont icon-search  icon-fw icon-lg mr-2"></i>
+                                                   <span>搜索</span>
+                                                </a>
+                                            </li> 
+                                                                                <li class="sidebar-item">
+                                            <a href="javascript:;">
+                                               <i class="fa fa-star icon-fw icon-lg mr-2"></i>
+                                               <span>视频娱乐</span>
+                                               <i class="iconfont icon-arrow-r-m sidebar-more text-sm"></i>
+                                            </a>
+                                            <ul>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-168" class="smooth"><span>在线</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-169" class="smooth"><span>动漫</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-170" class="smooth"><span>下载</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-171" class="smooth"><span>不可说</span></a>
+                                                </li>
+                                                                                            </ul>
+                                        </li>
+                                                                        <li class="sidebar-item">
+                                            <a href="javascript:;">
+                                               <i class="fa fa-eercast icon-fw icon-lg mr-2"></i>
+                                               <span>自定义父级</span>
+                                               <i class="iconfont icon-arrow-r-m sidebar-more text-sm"></i>
+                                            </a>
+                                            <ul>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-50" class="smooth"><span>休闲游戏x小信息</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-55" class="smooth"><span>RPG</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-58" class="smooth"><span>角色扮演</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-57" class="smooth"><span>暗黑</span></a>
+                                                </li>
+                                                                                            </ul>
+                                        </li>
+                                 
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-top py-2 border-color">
+                    <div class="flex-bottom">
+                        <ul> 
+                            <li id="menu-item-222" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-222 sidebar-item"><a href="http://158666.xyz/include">
+        <i class="fas fa-weight icon-fw icon-lg mr-2"></i>
+                <span>申请收录</span></a></li>
+ 
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main-content flex-fill page">
+		<div id="header" class="page-header big sticky">
+			<div class="navbar navbar-expand-md">
+                <div class="container-fluid p-0">
+
+                    <a href="http://158666.xyz/" class="navbar-brand d-md-none">
+						<img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo-dark_collapsed@2x.png" class="logo-light" alt="导航站">
+						<img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo-collapsed@2x.png" class="logo-dark d-none" alt="导航站">
+                    </a>
+                    
+                    <div class="collapse navbar-collapse order-2 order-md-1">
+                        <div class="header-mini-btn">
+                            <label>
+                                <input id="mini-button" type="checkbox" checked>
+                                <svg viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"> 
+                                    <path class="line--1" d="M0 40h62c18 0 18-20-17 5L31 55"></path>
+                                    <path class="line--2" d="M0 50h80"></path>
+                                    <path class="line--3" d="M0 60h62c18 0 18 20-17-5L31 45"></path>
+                                </svg>
+                            </label>
+                        
+                        </div>
+                                                
+                    <!-- 天气  -->
+                    <div id="tp-weather-widget"></div>
+                      <script>(function(a,h,g,f,e,d,c,b){b=function(){d=h.createElement(g);c=h.getElementsByTagName(g)[0];d.src=e;d.charset="utf-8";d.async=1;c.parentNode.insertBefore(d,c)};a["SeniverseWeatherWidgetObject"]=f;a[f]||(a[f]=function(){(a[f].q=a[f].q||[]).push(arguments)});a[f].l=+new Date();if(a.attachEvent){a.attachEvent("onload",b)}else{a.addEventListener("load",b,false)}}(window,document,"script","SeniverseWeatherWidget","//cdn.sencdn.com/widget2/static/js/bundle.js?t="+parseInt((new Date().getTime() / 100000000).toString(),10)));
+                        window.SeniverseWeatherWidget('show', {
+                          flavor: "slim",
+                          location: "WTSQQYHVQ973",
+                          geolocation: true,
+                          language: "zh-Hans",
+                          unit: "c",
+                          theme: "auto",
+                          token: "2d2b0015-6055-42c9-b686-40963fdc0fc4",
+                          hover: "enabled",
+                          container: "tp-weather-widget"
+                        })</script>
+                    <!-- 天气 end -->
+                        						<ul class="navbar-nav site-menu mr-4">
+                            <li id="menu-item-283" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-283"><a href="http://158666.xyz/blog">博客</a></li>
+<li id="menu-item-272" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-272"><a href="#">关于</a></li>
+ 
+						</ul>
+                    </div>
+                    
+                    <ul class="nav navbar-menu text-xs order-1 order-md-2">
+                                                <!-- 一言 -->
+						<li class="nav-item mr-3 mr-lg-0 d-none d-lg-block">
+							<div class="text-sm overflowClip_1">
+                                <script src="//v1.hitokoto.cn/?encode=js&select=%23hitokoto" defer></script> 
+                                <span id="hitokoto"></span> 
+							</div>
+						</li>
+                        <!-- 一言 end -->
+                                                						<li class="nav-item d-md-none mobile-menu ml-4">
+							<a href="javascript:" id="sidebar-switch" data-toggle="modal" data-target="#sidebar"><i class="iconfont icon-classification icon-2x"></i></a>
+						</li>
+                    </ul>
+				</div>
+            </div>
+        </div>
+<div id="content" class="container my-4 my-md-5">
+	<div class="row">
+		<div class="col-lg-8">
+    	    <div class="panel card">
+			<div class="card-body">
+				<div class="panel-header mb-4">
+    	        	    	        	<h1 class="h3 mb-3">在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化</h1>
+    	        	<div class="d-flex flex-fill text-muted text-sm pb-4 border-bottom border-t">
+    	        	<span class="mr-3 d-none d-sm-block"><a href="http://158666.xyz/pve"><i class="iconfont icon-classification"></i> PVE</a></span>    	        	<span class="mr-3 d-none d-sm-block"><i class="iconfont icon-time"></i> 5小时前</span>
+					<span class="mr-3"><a href="http://158666.xyz/author/2" title="xonec"><i class="iconfont icon-user-circle"></i> xonec</a></span>
+					<div class="flex-fill"></div>
+					                	<span class="mr-3"><a class="smooth-n" href="#comments"> <i class="iconfont icon-comment"></i> 0</a></span>
+                	<span class="mr-3"><a class="btn-like btn-link-like " href="javascript:;" post_like data-id="1122"><i class="iconfont icon-like"></i> <span class="like-count">0</span></a></span>
+					</div>
+    	        </div>
+				    	        <div class="panel-body mt-2"> 
+					<h2><strong>一：了解NVIDIA vGPU</strong></h2>
+<p>下图是Nvidia vGPU的原理。在宿主机上安装vGPU驱动，使用nvidia vGPU管理器控制vGPU，随后创建多个mdev设备，也就是vGPU，用于直通到虚拟机，虚拟机使用Nvidia 驱动用于驱动vGPU。有点类似gvt-g。不过这里最重要的是NVIDIA vGPU管理器 。</p>
+<p>目前vgpu_unlock项目只支持Time-sliced技术，也就是单GPU实例性能会动态分配。如一张P4，如果只有一个GPU实例，那么多获得接近100%的性能，同时2个GPU实例，会分别获得1/2的性能。</p>
+<p>根据Nvidia vgpu限制，单GPU实例，最少1g显存。如P4 8G，最多有8个1G 显存的GPU实例同时运行。<br>
+注意，Nvidia-vGPU授权是驱动授权，不是硬件授权。vgpu_unlock 这个项目并不能破解Nvidia-vGPU授权。它这是使消费卡能够支持vGPU 技术，而不是破解了授权。需要授权，还是需要去nvidia购买！（可以自建授权服务器https://hub.docker.com/r/collinwebdesigns/fastapi-dls）</p>
+<h2><strong>二：了解vgpu_unlock原理</strong></h2>
+<p>正如我们上说vgpu的启动流程。当然我们使用消费卡的时候，nvidia-vgpud这个服务会检测卡的类型，如果是消费卡，自然不会创建mdev设备。如果使用vgpu_unlock，此脚本会拦截nvidia-vgpud的调用，然后欺骗它，这是一张vGPU卡，快产生mdev设备信息吧！</p>
+<p>将mdev设备直通给虚拟机，启动的时候，vgpu_unlock又会拦截nvdia-vgpu-mgr服务，告诉它，GPU支持vGPU，快初始化设备吧！</p>
+<h2>三：vGPU_unlock支持的显卡</h2>
+<p>请务必参考下面列表显卡，如果是专业卡，请和下面同代核心就行。</p>
+<p>不支持30系！！！！！！！！！！</p>
+<h2>四：准备环境</h2>
+<h3>4.1: 配置软件源</h3>
+<pre><code>rm /etc/apt/sources.list
+rm /etc/apt/sources.list.d/*
+echo &quot;deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye main contrib non-free&quot;&gt;&gt;/etc/apt/sources.list
+echo &quot;deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-updates main contrib non-free&quot;&gt;&gt;/etc/apt/sources.list
+echo &quot;deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-backports main contrib non-free&quot;&gt;&gt;/etc/apt/sources.list
+echo &quot;deb https://mirrors.tuna.tsinghua.edu.cn/debian-security bullseye-security main contrib non-free&quot;&gt;&gt;/etc/apt/sources.list
+echo &quot;deb https://mirrors.tuna.tsinghua.edu.cn/proxmox/debian bullseye pve-no-subscription&quot;&gt;&gt;/etc/apt/sources.list
+</code></pre>
+<h3>4.2 安装必要的软件包</h3>
+<pre><code>apt update &amp;&amp; apt install dkms  git build-essential pve-kernel-5.15 pve-headers-5.15 dkms cargo jq uuid-runtime -y</code></pre>
+<p>安装mdevctl</p>
+<pre><code>wget -P /opt/ http://ftp.br.debian.org/debian/pool/main/m/mdevctl/mdevctl_0.81-1_all.deb
+dpkg -i /opt/mdevctl_0.81-1_all.deb</code></pre>
+<h3>4.3 配置内核</h3>
+<pre><code>echo vfio &gt;&gt; /etc/modules 
+echo vfio_iommu_type1 &gt;&gt; /etc/modules 
+echo vfio_pci &gt;&gt; /etc/modules 
+echo vfio_virqfd &gt;&gt; /etc/modules
+echo  &quot;blacklist nouveau&quot; &gt;&gt; /etc/modprobe.d/blacklist.conf
+echo &quot;options kvm ignore_msrs=1&quot; &gt; /etc/modprobe.d/kvm.conf 
+update-initramfs -k all -u</code></pre>
+<h3>4.4 配置引导</h3>
+<pre><code>#编辑grub，请不要盲目改。根据自己的环境，选择设置
+nano /etc/default/grub 
+#在里面找到：
+GRUB_CMDLINE_LINUX_DEFAULT=&quot;quiet&quot; 
+#然后修改为：
+GRUB_CMDLINE_LINUX_DEFAULT=&quot;quiet intel_iommu=on&quot; 
+#如果是amd cpu请改为：
+GRUB_CMDLINE_LINUX_DEFAULT=&quot;quiet amd_iommu=on&quot;
+#更新引导
+update-grub</code></pre>
+<h3>4.5 安装驱动</h3>
+<p>重启主机，待重启之后，验证系统内核是否在5.15</p>
+<pre><code>root@pve:~# uname -r
+5.15.30-2-pve</code></pre>
+<p>如出现5.15则说明正确。</p>
+<p>验证是否开启iommu</p>
+<pre><code>出现有如下iommu group说明成功
+root@pve3:~# dmesg |grep iommu
+[    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-5.11.22-7-pve root=/dev/mapper/pve-root ro quiet iommu=pt intel_iommu=on
+[    0.075784] Kernel command line: BOOT_IMAGE=/boot/vmlinuz-5.11.22-7-pve root=/dev/mapper/pve-root ro quiet iommu=pt intel_iommu=on
+[    0.352588] iommu: Default domain type: Passthrough (set via kernel command line)
+[    1.373583] pci 0000:00:00.0: Adding to iommu group 0
+[    1.373592] pci 0000:00:02.0: Adding to iommu group 1
+[    1.373605] pci 0000:00:14.0: Adding to iommu group 2
+[    1.373613] pci 0000:00:17.0: Adding to iommu group 3
+[    1.373623] pci 0000:00:1c.0: Adding to iommu group 4
+[    1.373637] pci 0000:00:1d.0: Adding to iommu group 5
+[    1.373647] pci 0000:00:1d.2: Adding to iommu group 6
+[    1.373656] pci 0000:00:1d.3: Adding to iommu group 7
+[    1.373675] pci 0000:00:1f.0: Adding to iommu group 8
+[    1.373683] pci 0000:00:1f.2: Adding to iommu group 8
+[    1.373691] pci 0000:00:1f.3: Adding to iommu group 8
+[    1.373699] pci 0000:00:1f.4: Adding to iommu group 8
+[    1.373707] pci 0000:00:1f.6: Adding to iommu group 9
+[    1.373717] pci 0000:01:00.0: Adding to iommu group 10
+[    1.373726] pci 0000:03:00.0: Adding to iommu group 11
+[    1.373735] pci 0000:05:00.0: Adding to iommu group 12
+[    1.656483]     intel_iommu=on</code></pre>
+<p>验证nouveau是否未启用</p>
+<pre><code>无输出，代表未启用
+root@pve3:~# lsmod|grep nouveau
+root@pve3:~# </code></pre>
+<p>下载驱动（该驱动版本决定了虚拟机系统内的驱动的版本，显卡驱动需要<strong>低于或者等于vGPU宿主机驱动</strong>。否则代码43。当然也不能太老。）</p>
+<pre><code>#将驱动通过网络下载至/opt目录
+wget https://mirrors.apqa.cn/d/vGPU/vgpu_unlock/drivers/NVIDIA-Linux-x86_64-510.47.03-vgpu-kvm-custom.run -P /opt</code></pre>
+<p>给驱动添加可执行权限</p>
+<pre><code>chmod +x /opt/NVIDIA-Linux-x86_64-510.47.03-vgpu-kvm-custom.run</code></pre>
+<p>以dkms方式安装驱动</p>
+<pre><code>sh -c /opt/NVIDIA-Linux-x86_64-510.47.03-vgpu-kvm-custom.run --dkms</code></pre>
+<p>运行命令后，会提示是否用dkms方式安装，选择yes，回车继续</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220426-164428.png" target="_blank" rel="nofollow"></a><a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220426-164428.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220426-164428.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>出现xorg告警，忽略</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220426-164609.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220426-164609.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>询问是否启用32位兼容库。这里可选可不选</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220426-164649.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220426-164649.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>开始安装驱动</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220426-164746.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220426-164746.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>进度条走完就ok，可能会有点时间。</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220426-164816.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220426-164816.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<h2>五：配置vgpu_unlock</h2>
+<h3>5.1 编译</h3>
+<pre><code>cd /opt &amp;&amp; git clone https://github.com/mbilker/vgpu_unlock-rs.git
+cd /opt/vgpu_unlock-rs
+cargo build --release
+mkdir /etc/systemd/system/{nvidia-vgpud.service.d,nvidia-vgpu-mgr.service.d} 
+echo -e &quot;[Service]\nEnvironment=LD_PRELOAD=/opt/vgpu_unlock-rs/target/release/libvgpu_unlock_rs.so&quot; &gt; /etc/systemd/system/nvidia-vgpud.service.d/vgpu_unlock.conf
+echo -e &quot;[Service]\nEnvironment=LD_PRELOAD=/opt/vgpu_unlock-rs/target/release/libvgpu_unlock_rs.so&quot; &gt; /etc/systemd/system/nvidia-vgpu-mgr.service.d/vgpu_unlock.conf
+systemctl daemon-reload</code></pre>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220426-165855.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220426-165855.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>重启主机。</p>
+<h2>六：验证</h2>
+<p>重启之后，使用<code>nvidia-smi</code> 确认是否如下，显示GPU信息。</p>
+<pre><code>root@pve:~# nvidia-smi 
+Wed Apr 27 23:33:10 2022       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 510.47.03    Driver Version: 510.47.03    CUDA Version: 11.2     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  P106-090            Off  | 00000000:05:00.0 Off |                  N/A |
+| 31%   35C    P0    28W /  75W |     11MiB /  3071MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+</code></pre>
+<p>使用<code>mdevctl types</code> 验证是否出现mdev设备</p>
+<pre><code>root@pve:/opt/vgpu_unlock-rs# mdevctl types
+0000:05:00.0
+  nvidia-156
+    Available instances: 12
+    Device API: vfio-pci
+    Name: GRID P40-2B
+    Description: num_heads=4, frl_config=45, framebuffer=2048M, max_resolution=5120x2880, max_instance=12
+  nvidia-215
+    Available instances: 12
+    Device API: vfio-pci
+    Name: GRID P40-2B4
+    Description: num_heads=4, frl_config=45, framebuffer=2048M, max_resolution=5120x2880, max_instance=12
+  nvidia-241
+    Available instances: 24
+    Device API: vfio-pci
+    Name: GRID P40-1B4
+    Description: num_heads=4, frl_config=45, framebuffer=1024M, max_resolution=5120x2880, max_instance=24
+  nvidia-283
+    Available instances: 6
+    Device API: vfio-pci
+    Name: GRID P40-4C
+    Description: num_heads=1, frl_config=60, framebuffer=4096M, max_resolution=4096x2160, max_instance=6
+  nvidia-284
+    Available instances: 4
+    Device API: vfio-pci
+    Name: GRID P40-6C
+    Description: num_heads=1, frl_config=60, framebuffer=6144M, max_resolution=4096x2160, max_instance=4
+  nvidia-285
+    Available instances: 3
+    Device API: vfio-pci
+    Name: GRID P40-8C
+    Description: num_heads=1, frl_config=60, framebuffer=8192M, max_resolution=4096x2160, max_instance=3
+  nvidia-286
+    Available instances: 2
+    Device API: vfio-pci
+    Name: GRID P40-12C
+    Description: num_heads=1, frl_config=60, framebuffer=12288M, max_resolution=4096x2160, max_instance=2
+</code></pre>
+<h2>七：开始使用</h2>
+<h3>7.0 认识原生vGPU和vGPU-rs</h3>
+<p>原生vGPU就是在系统内识别就是一个vGPU设备，需要安装vGPU驱动，需要授权</p>
+<p>vGPU-rs是改写了vGPU逻辑信息，在系统里面识别出来是一个专业卡，安装专业卡的驱动。这样不需要授权了，但缺失了nevnc。需要做一些配置（如下）。</p>
+<h3>7.1 配置vgpu参数（可选配置。使用原生vgpu，可以忽略）</h3>
+<pre><code>#创建配置文件夹
+mkdir /etc/vgpu_unlock
+#创建vgpu配置文件
+touch /etc/vgpu_unlock/profile_override.toml</code></pre>
+<p>将vgpu配置信息写入<code>/etc/vgpu_unlock/profile_override.toml</code>每次启动一个vgpu设备，vgpu-mgr服务会自动读取此文件，所以修改此文件，是下次启动生效。</p>
+<pre><code>[profile.nvidia-18]
+num_displays = 1
+display_width = 1920
+display_height = 1080
+max_pixels = 2073600
+cuda_enabled = 1
+frl_enabled = 0
+framebuffer = 12348030976
+pci_id = 0x17F011A9
+pci_device_id = 0x17F0</code></pre>
+<p>参数说明：</p>
+<ul>
+<li>
+<p><code>[profile.nvidia-18]</code>这是针对<code>nvidia-18</code> vgpu型号的配置。若需要配置的vgpu型号为nvidia-46，则需要改成nvidia-46。见7.2节</p>
+</li>
+<li>
+<p><code>num_displays</code>  最大显示器数量</p>
+</li>
+<li>
+<p><code>display_width = 1920</code></p>
+</li>
+<li>
+<p><code>display_height = 1080</code></p>
+</li>
+<li>
+<p><code>max_pixels = 2073600 这3个是虚拟显示器的分辨率，max_pixels是长宽的乘积</code></p>
+</li>
+<li>
+<p><code>cuda_enabled = 1</code>是否开启cuda</p>
+</li>
+<li>
+<p><code>frl_enabled = 0</code> 是否限制帧数，0为不限制</p>
+</li>
+<li>
+<p><code>framebuffer =</code> 显存，请查看下面的补充</p>
+</li>
+<li>
+<p><code>pci_id =</code>  SDID SVID的组合</p>
+</li>
+<li>
+<p><code>pci_device_id =</code> DID 设备id</p>
+</li>
+</ul>
+<h4>7.1.1 framebuffer</h4>
+<p>framebuffer意思是vgpu管理程序设定的vgpu显存。</p>
+<p>通过这个网址换算<a href="https://www.bejson.com/convert/filesize/" target="_blank" rel="nofollow">在线文件大小(bit,bytes,KB,MB,GB,TB)转换换算-BeJSON.com</a></p>
+<p>注意：vgpu会默认占用128M，所以如果要改显存，请将结果减去128M再去换算</p>
+<p>例如，你期望显存为2048M，所以就用2048-128=1920</p>
+<p><strong>更新：新版本占用64M，所以-64，而不是128</strong></p>
+<p>进入上面的网址，进行换算。bytes是我们要的结果</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ%E6%88%AA%E5%9B%BE20220428002956.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ%E6%88%AA%E5%9B%BE20220428002956.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>换算结果为2013265920</p>
+<p>注意！非必要情况，请勿修改显卡，否则无法初始化mdev设备。</p>
+<h4>7.1.2 pci_id和pci_device_id</h4>
+<p>在正常情况下，将vgpu设备直通给VM，会带有vgpu的设备id，这样在系统内，会识别这个vgpu为p40-1a或者rt6000-1a之类的型号。随后安装nvidia-vgpu驱动，会将vgpu设备作为一个vgpu设备来使用，如进行<strong>授权管理</strong>。</p>
+<p>正因为vgpu卡和普通的消费卡，核心相同，只是驱动不同，导致了功能有所不一样，所以有了vgpu_unlock项目，让消费卡也能支持vgpu。</p>
+<p>这是宿主机层面的。</p>
+<p>在虚拟机层面来讲。vgpu的核心，其实和显卡的核心一样，那么从理论上，将vgpu的设备id改成消费卡的id，那么也应该能够驱动。</p>
+<p>然而，由于消费卡某些专业功能不能使用，所以建议将vgpu的设备id改成专业卡的id。</p>
+<p>配置文件中的<code>pci_id = 0x17F011A0</code>和<code>pci_device_id = 0x17F0</code>就是修改vgpu的设备信息。这些参数，vgpu管理程序会读取这些信息，重写vgpu配置，更加的稳定和真实。</p>
+<h4>pci_device_id：是vgpu所属的设备id</h4>
+<p>这项属性应该从此处获得：<a href="https://devicehunt.com/view/type/pci/vendor/10DE/" target="_blank" rel="nofollow">https://devicehunt.com/view/type/pci/vendor/10DE/</a></p>
+<p>正因我们的目的，是改写vgpu信息，使其在虚拟机内，能被识别为专业卡，从而绕过vgpu的驱动限制，无需授权。所以，需要下载专业卡的驱动。</p>
+<p>所以，我们应该根据你的物理卡的核心来配置这个设备id。</p>
+<p>例如，你有一张1080来使用vgpu，从上面的网站，我们可以看到1080的核心代号为，</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-100538.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-100538.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>那么你应该选择核心为GP104GL的卡。如下，所以你应该选择P5000或者P4000。所以就去nvidia去下载P5000或者P4000的驱动。</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-101724.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-101724.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>所以如果你要用1080，那么你的pci_device_id = 0x1BB0。但是这个id可能打驱动，会识别不了硬件。只需要换一个，如果P5000的ID不行，换P4000的再试。</p>
+<h4>pci_id: SDID的SVID的组合</h4>
+<p>pci_id 和pci_device_id用下面一张图就可以看得懂</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/win-ID-1-1.webp" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/win-ID-1-1.webp" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>SDID是二级制造商设备识别码，可以和DID一样</p>
+<p>SVID是二级制造商识别码。可以和VID一样</p>
+<p>那么如果你不知道这些信息，你可以直接写pci_id = 0x1BB010DE</p>
+<h3>7.2 vgpu类型</h3>
+<p>当我们使用<code>mdevctl types</code> 会出现很多信息。其中就包括了vgpu的型号</p>
+<pre><code>root@pve2:/opt/vgpu_unlock# mdevctl types
+0000:01:00.0 
+nvidia-156
+Available instances: 0
+Device API: vfio-pci
+Name: GRID P40-2B
+Description: num_heads=4, frl_config=45, framebuffer=2048M ,
+max_resolution=5120x2880, max_instance=12
+
+nvidia-215
+Available instances: 0
+Device API: vfio-pci
+Name: GRID P40-2B4
+Description: num_heads=4, frl_config=45, framebuffer=2048M,
+max_resolution=5120x2880, max_instance=12</code></pre>
+<p>这些是什么意思呢？</p>
+<p>举个例子</p>
+<pre><code>nvidia-257
+
+Available instances: 4
+Device API: vfio-pci
+Name: GRID RTX6000-2Q
+Description: num=heads=4, frl_config=60,
+framebuffer=2048MB,max_resolution=7680x4320, max_instance=4</code></pre>
+<ul>
+<li>nvidia-257 --&gt;vgpu 类型</li>
+<li>Available instances ---&gt;可用的设备数</li>
+<li>Name---&gt;显示名</li>
+<li>Description---&gt;描述，framebuffer 显存，frl 应该是最大 fps，分辨率，最多的设备</li>
+</ul>
+<p>其中 GRID RTX6000-2Q 是 mdev 的名字，RTX6000--显卡名，2--2G 显存，Q 代表 vWS</p>
+<p>关于最后一位字母，如下</p>
+<p>A = Virtual Applications (vApps)</p>
+<p>B = Virtual Desktops (vPC)</p>
+<p>C = AI/Machine Learning/Training (vCS or vWS)</p>
+<p>Q = Virtual Workstations (vWS)（性能最好）</p>
+<p>每种不同类型的GPU卡，都会存在不同的vgpu类型。例如P4，有P4-1B，例如RTX6000-1B之类的</p>
+<p>总体不变的是上面所说的规则：</p>
+<p>按照显存分，如P4-1B,P4-1Q，都属于1g显存。</p>
+<p>按照功能分，如P4-1B，vPC设备，P4-1Q，vDWS设备。需要不同的许可证。</p>
+<p>在虚拟化层面，我们只关心vgpu的型号，也就是<code>nvidia-257</code></p>
+<p>在配置vgpu的时候，我们就需要选择正确的型号。</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-141320.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-141320.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>如上图所示，我们需要通过mdevctl types的输出，找到我们需要的vgpu型号，通过<code>profile_override.toml</code>配置参数，再去web界面配置vgpu，才能完成vgpu部署。</p>
+<h3>7.4.1 修改虚拟机配置（必须操作）//PVE  7.2-7无需此操作</h3>
+<p>添加下面行到虚拟机conf中</p>
+<pre><code>args: -uuid 00000000-0000-0000-0000-000000000100</code></pre>
+<p>注意的是，uuid最后的值需要改成你的vmid。如果你的vmid为3333，那么你应该改成</p>
+<p><code>args: -uuid 00000000-0000-0000-0000-000000003333</code></p>
+<p>如果你的vmid是121，那么你应该改成</p>
+<p><code>args: -uuid 00000000-0000-0000-0000-000000000121</code></p>
+<p>注意，uuid的长度和格式是不能变的，根据自己的vmid，替换尾数。</p>
+<h3>7.4.2 修改PVE的代码，以略过上述步骤，简化部署。//PVE  7.2-7之后无需修改，官方以添加此功能</h3>
+<p>先备份一下</p>
+<pre><code>cp /usr/share/perl5/PVE/QemuServer.pm /usr/share/perl5/PVE/QemuServer.pm.back</code></pre>
+<p>使用vim或者nano或者其他你熟悉的编辑器，打开<code>/usr/share/perl5/PVE/QemuServer.pm</code></p>
+<p>找到下面部分。</p>
+<pre><code>    push @$cmd, $kvm_binary;
+
+    push @$cmd, &#039;-id&#039;, $vmid;
+
+    my $vmname = $conf-&gt;{name} || &quot;vm$vmid&quot;;
+
+    push @$cmd, &#039;-name&#039;, $vmname;
+
+    push @$cmd, &#039;-no-shutdown&#039;;
+
+    my $use_virtio = 0;    </code></pre>
+<p>小技巧，可以通过搜索<code>-no-shutdown</code> 快速定位</p>
+<p>在<code>-no-shutdown</code>这一行下面添加2行</p>
+<pre><code>    my $vmuuid = PVE::SysFSTools::generate_mdev_uuid($vmid);
+
+    push @$cmd, &#039;-uuid&#039; , $vmuuid;</code></pre>
+<p>最终结果如下</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ%E6%88%AA%E5%9B%BE20220620103319.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ%E6%88%AA%E5%9B%BE20220620103319.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>保存修改，</p>
+<p>使用命令重启一下pvedaemon</p>
+<p><code>systemctl restart pvedaemon.service</code></p>
+<p>如果有报错，或者重启失败，那肯定是你没修改对。建议仔细看看</p>
+<p>这样的好处是，系统自动给虚拟生成UUID，就不需要手动添加虚拟机配置文件了。直接在web上添加vgpu即可。</p>
+<p>注意：没有测试过与其他mdev设备是否会冲突。如gvt-g。请自行测试。</p>
+<p>升级之后，需要重启修改。</p>
+<p>如果要回退，请执行</p>
+<p><code>cp /usr/share/perl5/PVE/QemuServer.pm.back /usr/share/perl5/PVE/QemuServer.pm</code></p>
+<h3>7.5 创建虚拟机</h3>
+<p>使用vgpu建议使用Windows 21h1以上的系统。</p>
+<h4>7.5.1 创建虚拟机并安装系统</h4>
+<p>创建一个虚拟机，seabios和ovmf都可以，芯片组必须是Q35！除非你Q35确实不能用，则换成i440fx。此时不要直通显示设备。</p>
+<p>参考配置如下</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-111724.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-111724.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>注意！</p>
+<p><strong>vgpu在系统中，是作为一个3d设备，所以需要一个额外的显示卡，也就是不要把显卡设置成无！</strong></p>
+<p>创建好系统之后，请在系统中，开启远程功能。如远程桌面，todesk，vnc，向日葵，parsec等。</p>
+<p>这是因为Win10此类系统，会联网自动安装驱动，如果直通了vgpu，且系统安装了驱动，系统会呈现双显示器状态，可能导致PVE网页虚拟机控制台黑屏，或者是副屏状态，导致无法操作虚拟机。如下面</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-113920.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-113920.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>如果你不慎掉入这个的坑，请关闭虚拟机，分离vgpu，开启远程功能。</p>
+<h4>7.5.2 直通vgpu设备</h4>
+<p>在面板，点击添加PCI设备，勾选所有功能和PCIE（vGPU是一个3d设备，请不要勾选主GPU）。在Mdev类型中选择vgpu设备。选哪种，请参考上文。</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-112621.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-112621.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>最终虚拟机配置，像这样：</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-112758.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-112758.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>现在你可以开启虚拟机。如果是严格按照上面教程操作，那么应该不会有意外发生。</p>
+<p>如果你看到有下面提示：</p>
+<pre><code>kvm: -device vfio-pci,sysfsdev=/sys/bus/pci/devices/0000:05:00.0/00000000-0000-0000-0000-000000003561,id=hostpci0,bus=ich9-pcie-port-1,addr=0x0: warning: vfio 00000000-0000-0000-0000-000000003561: Could not enable error recovery for the device
+TASK OK</code></pre>
+<p>不要在意，这只是个提示，最终结果都是TASK OK。</p>
+<h4>7.5.3 安装显卡驱动</h4>
+<p>显卡驱动需要<strong>低于或者等于vGPU宿主机驱动</strong>。否则代码43。当然也不能太老。</p>
+<p>例如本文<code>460.73</code>，所以用下面的453.10是完全可以的！要使用473，那一定会出现问题！</p>
+<p>至于在哪里下驱动？我可以吐槽吗？当然是nvidia去下载咯，</p>
+<p><a href="https://www.nvidia.com/Download/Find.aspx?lang=en-us" target="_blank" rel="nofollow">https://www.nvidia.com/Download/Find.aspx?lang=en-us</a></p>
+<p>选择模拟之后的卡的驱动，建议选择DCH驱动程序</p>
+<p>我已经将比较兼容的驱动，放置在网盘中</p>
+<p><a href="https://foxi.buduanwang.vip/pan/foxi/Virtualization/vGPU/guestdrivers/" target="_blank" rel="nofollow">https://foxi.buduanwang.vip/pan/foxi/Virtualization/vGPU/guestdrivers/</a></p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-113507.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-113507.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>请按照自己的情况下载驱动。</p>
+<p>若在系统中提示驱动和硬件不兼容，无法安装，请更换did</p>
+<h3>7.6 访问虚拟机</h3>
+<p>正常安装好驱动，那么不出意外，你的设备管理器，会看到模拟成专业卡的vgpu设备</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-124447.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-124447.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>屏幕也会有双屏</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/97D383B7-5950-4BD0-803B-2E6A0BB92897.jpg" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/97D383B7-5950-4BD0-803B-2E6A0BB92897.jpg" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<p>由于vgpu属于虚拟的，无法输出到物理显示器，所以应该通过远程协议访问。推荐使用parsec进行串流，但是parsec需要编码，如果你的显卡没有编码器，则不能用parsec，例如P106。</p>
+<p>对于双屏，建议设置仅为vgpu屏幕。下面是通过系统内部的vnc（不是pve的novnc控制台），进行鲁大师跑分的截图。</p>
+<p>再次强调！要玩主机游戏啥的，请使用串流软件。用rdp不行的。</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-125142.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220428-125142.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+<h2>九：排错</h2>
+<p>对于排错这部分，需要你掌握KVM知识、vgpu知识以及Linux基础。</p>
+<p>如最开始所说，vgpu有2个服务。</p>
+<p>可以通过2个命令查看nvidia-vgpu日志</p>
+<pre><code>journalctl -u  nvidia-vgpud
+journalctl -u  nvidia-vgpu-mgr</code></pre>
+<p>如vgpu初始化部分</p>
+<pre><code>Apr 28 00:15:58 pve nvidia-vgpu-mgr[2534]: notice: vmiop_env_log: nvidia-vgpu-mgr daemon started
+#创建vgpu设备
+Apr 28 00:20:17 pve nvidia-vgpu-mgr[2534]: VgpuStart {
+                                               uuid: {00000000-0000-0000-0000-000000003561},
+                                               config_params: &quot;vgpu_type_id=46&quot;,
+                                               unknown_410: [75, 13, 0, 0, 0, 5, 0, 0, 1, 0, 0, 0, 0, 5, 0, 0],
+                                           }
+#默认的vgpu配置
+Apr 28 00:20:17 pve nvidia-vgpu-mgr[3528]: notice: vmiop_env_log: vmiop-env: guest_max_gpfn:0x0
+...skipping...
+                                                num_displays: 4,
+                                                display_width: 5120,
+                                                display_height: 2880,
+                                                max_pixels: 17694720,
+                                                frl_config: 60,
+                                                cuda_enabled: 1,
+                                                ecc_supported: 1,
+                                                mig_instance_size: 0,
+                                                multi_vgpu_supported: 0,
+                                                pci_id: 0x1b3811e8,
+                                                pci_device_id: 0x1b38,
+                                                framebuffer: 0x38000000,
+                                                mappable_video_size: 0x400000,
+                                                framebuffer_reservation: 0x8000000,
+                                                encoder_capacity: 0x64,
+                                                bar1_length: 0x100,
+                                                blob: [71, 82, 73, 68, 32, 80, 52, 48, 45, 49, 81, 0, 96, 1, 0, 0, 8, 80, 244, 134, 2, 179, 255, 255, 0, 0, 0, 0, 96, 1, 0&gt;
+                                                license_type: &quot;NVIDIA RTX Virtual Workstation&quot;,
+                                            }
+#读取/etc/vgpu_unlock/profile_override.toml，并覆写vgpu配置
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: Applying profile nvidia-46 overrides
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: Patching nvidia-46/num_displays: 4 -&gt; 1
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: Patching nvidia-46/display_width: 5120 -&gt; 1920
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: Patching nvidia-46/display_height: 2880 -&gt; 1080
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: Patching nvidia-46/max_pixels: 17694720 -&gt; 2073600
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: Patching nvidia-46/cuda_enabled: 1 -&gt; 1
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: Patching nvidia-46/pci_id: 456659432 -&gt; 472977896
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: Patching nvidia-46/pci_device_id: 6968 -&gt; 7217
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: Patching nvidia-46/frl_enabled: 1 -&gt; 0
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: op_type: 0xa0810115 failed.
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: notice: vmiop_log: (0x0): Setting mappable_cpu_host_aperture to 10M
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: notice: vmiop_log: (0x0): gpu-pci-id : 0x500
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: notice: vmiop_log: (0x0): vgpu_type : Quadro
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: notice: vmiop_log: (0x0): Framebuffer: 0x38000000
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: notice: vmiop_log: (0x0): Virtual Device Id: 0x1c31:0x11e8
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: notice: vmiop_log: ######## vGPU Manager Information: ########
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: notice: vmiop_log: Driver Version: 460.73.01
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: op_type: 0x2080012f failed.
+#在VM中获取vgpu信息
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: notice: vmiop_log: (0x0): Cannot query ECC status. vGPU ECC support will be disabled.
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: notice: vmiop_log: (0x0): Init frame copy engine: syncing...
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: notice: vmiop_log: (0x0): vGPU migration disabled
+Apr 28 12:42:18 pve nvidia-vgpu-mgr[26264]: notice: vmiop_log: display_init inst: 0 successful
+Apr 28 12:42:49 pve nvidia-vgpu-mgr[26264]: notice: vmiop_log: ######## Guest NVIDIA Driver Information: ########
+Apr 28 12:42:49 pve nvidia-vgpu-mgr[26264]: notice: vmiop_log: Driver Version: 453.10
+Apr 28 12:42:49 pve nvidia-vgpu-mgr[26264]: notice: vmiop_log: vGPU version: 0x70001
+Apr 28 12:42:49 pve nvidia-vgpu-mgr[26264]: notice: vmiop_log: (0x0): Current max guest pfn = 0x17cd58!
+lines 477-521/521 (END)</code></pre>
+<p>附：笔记本也支持</p>
+<a href="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220512-105135.png" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" data-fancybox="images" data-caption="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化" target="_blank" rel="nofollow"><img decoding="async" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2022/04/QQ20220512-105135.png" src="http://158666.xyz/$loadimg_url" alt="在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化"></a>
+					    	        </div>
+			
+				<div class="tags my-2">
+									</div>
+    	        			     
+				    	    </div>
+			</div>
+    	    <div class="single-top-area text-sm clearfix card mt-4">
+					
+    	    	<div class="card-body"> 
+    	            <strong>版权声明：</strong><a href="http://158666.xyz/author/2" title="导航站">xonec</a> 发表于 2023-06-12 18:22:40。<br>
+    	            <strong>转载请注明：</strong><a href="http://158666.xyz/1122.html" rel="bookmark" title="本文固定链接 https://dh.158666.xyz/1122.html">在Proxmox VE 7.1 中开启vGPU_unlock，实现显卡虚拟化 | 导航站</a>
+    	    	</div>
+					
+    	    </div>
+    	    <div class="near-navigation rounded mt-4 py-2">
+    	    	    	    	    	    	<div class="nav previous border-right border-color">
+    	            <a class="near-permalink" href="http://158666.xyz/1120.html">
+    	    		<span>上一篇</span>
+    	    		<h4 class="near-title">国光的vGPU教程</h4>
+    	    		</a>
+    	    	</div>
+    	    	    	    	    	    	<div class="nav next border-left border-color">
+    	    		<a class="near-permalink" href="http://158666.xyz/1124.html">
+    	    		<span>下一篇</span>
+    	            <h4 class="near-title">PVE虚拟机模板</h4>
+    	        </a>
+    	    	</div>
+    	    	    	    </div>
+    	    
+<!-- comments -->
+<div id="comments" class="comments">
+	<h1 id="comments-list-title" class="comments-title h5 mx-1 my-4">
+		<i class="iconfont icon-comment"></i>
+		<span class="noticom">
+			<a href="http://158666.xyz/1122.html#respond" class="comments-title">暂无评论</a> 
+		</span>
+	</h1> 
+	<div class="card">
+		<div class="card-body"> 
+						<div id="respond_box">
+				<div id="respond" class="comment-respond">
+					    				<form action="https://dh.158666.xyz/wp-comments-post.php" method="post" id="commentform" class="text-sm mb-4">	
+						<div class="visitor-avatar d-flex flex-fill mb-2">
+														<img class="v-avatar rounded-circle" src="http://158666.xyz/wp-content/themes/webstackpro/images/gravatar.jpg">
+													</div> 
+						<div class="comment-textarea mb-3">
+							<textarea name="comment" id="comment" class="form-control" placeholder="输入评论内容..." tabindex="4" cols="50" rows="3"></textarea>
+						</div>
+							
+						<div id="comment-author-info" class="row  row-sm">
+							<div class="col-sm-6 col-lg-4 mb-3"><input type="text" name="author" id="author" class="form-control" value="" size="22" placeholder="昵称" tabindex="2"></div>	
+							<div class="col-sm-6 col-lg-4 mb-3"><input type="text" name="email" id="email" class="form-control" value="" size="22" placeholder="邮箱" tabindex="3"></div>
+							<div class="col-sm-12 col-lg-4 mb-3"><input type="text" name="url" id="url" class="form-control" value="" size="22" placeholder="网址" tabindex="4"></div>
+						</div>
+												<div class="com-footer text-right">
+							<input type="hidden" id="_wpnonce" name="_wpnonce" value="a13019c435"><input type="hidden" name="_wp_http_referer" value="/1122.html?simply_static_page=36">							<a rel="nofollow" id="cancel-comment-reply-link" style="display: none;" href="javascript:;" class="btn btn-light custom_btn-outline mx-2">再想想</a>
+														<input class="btn btn-dark custom_btn-d" name="submit" type="submit" id="submit" tabindex="5" value="发表评论">
+														<input type="hidden" name="comment_post_ID" value="1122" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+						</div>
+						    				</form>
+					<div class="clear"></div>
+    				  				</div>
+  			</div>	
+						<div id="loading-comments"><span></span></div>
+						<div class="not-comment card"><div class="card-body nothing text-center color-d">暂无评论...</div></div>
+					
+		</div>	
+	</div>
+</div>
+<!-- comments end -->
+		</div> 
+		<div class="sidebar col-lg-4 pl-xl-4 d-none d-lg-block">
+			
+
+	
+			<div id="about_author-7" class="card about_author">
+		
+	<div class="widget-author-cover">
+		<div class="media media-2x1">
+                        <div class="media-content" data-src="https://i.loli.net/2020/01/11/wHoOcfQGhqvlUkd.jpg"></div>
+            		</div>
+		<div class="widget-author-avatar">  
+			<div class="flex-avatar"> 
+			<img alt="" src="https://cn.gravatar.com/avatar/6da082c2b9cf56fb1cfaacd00fbc7b51?s=80&#038;d=retro&#038;r=g" srcset="https://cn.gravatar.com/avatar/6da082c2b9cf56fb1cfaacd00fbc7b51?s=160&#038;d=retro&#038;r=g 2x" class="avatar avatar-80 photo" height="80" width="80" decoding="async">	 
+	  		</div>	 
+	  	</div>
+  	</div>
+    <div class="widget-author-meta text-center p-4">
+      	<div class="h6 mb-3">xonec<small class="d-block">
+			<span class="badge badge-outline-primary mt-2">
+			    博主			</span></small>
+		</div>
+      	<div class="desc text-xs mb-3 overflowClip_2"></div>
+	    <div class="row no-gutters text-center">
+	      	<a href="http://158666.xyz/author/2" target="_blank" class="col">
+	        	<span class="font-theme font-weight-bold text-md">9</span><small class="d-block text-xs text-muted">文章</small>
+	      	</a>
+	      	<a href="http://158666.xyz/author/2" target="_blank" class="col">
+	        	<span class="font-theme font-weight-bold text-md">0</span><small class="d-block text-xs text-muted">评论</small>
+	      	</a>
+	      	<a href="http://158666.xyz/author/2" target="_blank" class="col">
+	        	<span class="font-theme font-weight-bold text-md">34,278</span><small class="d-block text-xs text-muted">浏览</small>
+	      	</a>
+	      	<a href="http://158666.xyz/author/2" target="_blank" class="col">
+	        	<span class="font-theme font-weight-bold text-md">2,797</span><small class="d-block text-xs text-muted">获赞</small>
+	      	</a>
+	    </div>
+	</div>
+
+	
+	</div>
+<div id="hot_comment-12" class="card hot_comment">
+<div class="card-header widget-header"><span><i class="mr-2 iconfont icon-hot"></i>热评文章</span></div>
+	
+	<div class="card-body"> 
+		<div class="list-grid list-rounded my-n2">
+				
+								<div class="list-item py-2">
+										<div class="media media-3x2 rounded col-4 mr-3">
+            	                    	        <a class="media-content" href="http://158666.xyz/1128.html" title="hexo+netlify+Qexo后端+github自动化" data-src="https://b2.kwxn.eu.org/hexonews/2022/12/d78fdf0a560ca5ccdef4aea9e7561188.jpg"></a>
+            	        					</div>
+										<div class="list-content py-0">
+						<div class="list-body">
+							<a href="http://158666.xyz/1128.html" class="list-title overflowClip_2" rel="bookmark">hexo+netlify+Qexo后端+github自动化</a>
+						</div>
+						<div class="list-footer">
+							<div class="d-flex flex-fill text-muted text-xs">
+								<time class="d-inline-block">5小时前</time>
+								<div class="flex-fill"></div>
+								<span class="discuss"><i class="iconfont icon-comment"></i> 0</span>
+							</div>
+						</div>
+					</div>
+				</div> 
+								<div class="list-item py-2">
+										<div class="media media-3x2 rounded col-4 mr-3">
+            	                    	        <a class="media-content" href="http://158666.xyz/1114.html" title="群晖docker部署bitwarden(vaultwarden)、反向代理与浏览器、iOS设置" data-src="https://picoe.oss-cn-hangzhou.aliyuncs.com/img/638ad47808074742.png_e1080.jpg"></a>
+            	        					</div>
+										<div class="list-content py-0">
+						<div class="list-body">
+							<a href="http://158666.xyz/1114.html" class="list-title overflowClip_2" rel="bookmark">群晖docker部署bitwarden(vaultwarden)、反向代理与浏览器、iOS设置</a>
+						</div>
+						<div class="list-footer">
+							<div class="d-flex flex-fill text-muted text-xs">
+								<time class="d-inline-block">5小时前</time>
+								<div class="flex-fill"></div>
+								<span class="discuss"><i class="iconfont icon-comment"></i> 0</span>
+							</div>
+						</div>
+					</div>
+				</div> 
+								<div class="list-item py-2">
+										<div class="media media-3x2 rounded col-4 mr-3">
+            	                    	        <a class="media-content" href="http://158666.xyz/1116.html" title="PVE的local和local-lvm" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2021/09/QQ%E6%88%AA%E5%9B%BE20210927104722.png"></a>
+            	        					</div>
+										<div class="list-content py-0">
+						<div class="list-body">
+							<a href="http://158666.xyz/1116.html" class="list-title overflowClip_2" rel="bookmark">PVE的local和local-lvm</a>
+						</div>
+						<div class="list-footer">
+							<div class="d-flex flex-fill text-muted text-xs">
+								<time class="d-inline-block">5小时前</time>
+								<div class="flex-fill"></div>
+								<span class="discuss"><i class="iconfont icon-comment"></i> 0</span>
+							</div>
+						</div>
+					</div>
+				</div> 
+								<div class="list-item py-2">
+										<div class="media media-3x2 rounded col-4 mr-3">
+            	                    	        <a class="media-content" href="http://158666.xyz/1118.html" title="PVE的优化过程" data-src="https://i.loli.net/2020/01/16/AKv8lyzT3rUH2Ic.jpg"></a>
+            	        					</div>
+										<div class="list-content py-0">
+						<div class="list-body">
+							<a href="http://158666.xyz/1118.html" class="list-title overflowClip_2" rel="bookmark">PVE的优化过程</a>
+						</div>
+						<div class="list-footer">
+							<div class="d-flex flex-fill text-muted text-xs">
+								<time class="d-inline-block">5小时前</time>
+								<div class="flex-fill"></div>
+								<span class="discuss"><i class="iconfont icon-comment"></i> 0</span>
+							</div>
+						</div>
+					</div>
+				</div> 
+								<div class="list-item py-2">
+										<div class="media media-3x2 rounded col-4 mr-3">
+            	                    	        <a class="media-content" href="http://158666.xyz/1120.html" title="国光的vGPU教程" data-src="https://image.3001.net/images/20230112/16734940272580.png"></a>
+            	        					</div>
+										<div class="list-content py-0">
+						<div class="list-body">
+							<a href="http://158666.xyz/1120.html" class="list-title overflowClip_2" rel="bookmark">国光的vGPU教程</a>
+						</div>
+						<div class="list-footer">
+							<div class="d-flex flex-fill text-muted text-xs">
+								<time class="d-inline-block">5小时前</time>
+								<div class="flex-fill"></div>
+								<span class="discuss"><i class="iconfont icon-comment"></i> 0</span>
+							</div>
+						</div>
+					</div>
+				</div> 
+									</div>
+	</div>
+
+	</div>
+<div id="hot_post_img-3" class="card hot_post_img">
+<div class="card-header widget-header"><span><i class="mr-2 iconfont icon-chart-pc"></i>热门文章</span></div>
+	
+	
+	<div class="card-body"> 
+		<div class="list-grid list-rounded my-n2">
+		    		</div>
+	</div>
+
+	</div>
+<div id="cx_tag_cloud-8" class="card cx_tag_cloud">
+<div class="card-header widget-header"><span><i class="mr-2 iconfont icon-tags"></i>热门标签</span></div> 
+		
+		<div class="card-body">
+		<div class="tags text-justify">
+			 
+				<a href="http://158666.xyz/apptag/yizhi" title="益智" class="tag-yizhi color-5">
+				益智<span>(3)</span></a>
+			 
+				<a href="http://158666.xyz/apptag/%e7%a4%be%e4%ba%a4" title="社交" class="tag-%e7%a4%be%e4%ba%a4 color-1">
+				社交<span>(1)</span></a>
+			 
+				<a href="http://158666.xyz/apptag/jiemi" title="解密" class="tag-jiemi color-2">
+				解密<span>(1)</span></a>
+			 
+				<a href="http://158666.xyz/apptag/xiuxian" title="休闲" class="tag-xiuxian color-8">
+				休闲<span>(1)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e6%a0%b8%e6%b3%84%e6%bc%8f" title="核泄漏" class="tag-%e6%a0%b8%e6%b3%84%e6%bc%8f color-0">
+				核泄漏<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e5%81%a5%e5%ba%b7" title="健康" class="tag-%e5%81%a5%e5%ba%b7 color-3">
+				健康<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e7%94%9f%e5%91%bd%e8%b5%b7%e6%ba%90" title="生命起源" class="tag-%e7%94%9f%e5%91%bd%e8%b5%b7%e6%ba%90 color-2">
+				生命起源<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e6%9c%9b%e8%bf%9c%e9%95%9c" title="望远镜" class="tag-%e6%9c%9b%e8%bf%9c%e9%95%9c color-1">
+				望远镜<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e9%bb%91%e6%b4%9e" title="黑洞" class="tag-%e9%bb%91%e6%b4%9e color-4">
+				黑洞<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e7%89%9b%e9%a1%bf" title="牛顿" class="tag-%e7%89%9b%e9%a1%bf color-0">
+				牛顿<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e5%8a%9b%e5%ad%a6" title="力学" class="tag-%e5%8a%9b%e5%ad%a6 color-7">
+				力学<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e5%bc%95%e5%8a%9b%e6%b3%a2" title="引力波" class="tag-%e5%bc%95%e5%8a%9b%e6%b3%a2 color-5">
+				引力波<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e5%ae%87%e5%ae%99" title="宇宙" class="tag-%e5%ae%87%e5%ae%99 color-0">
+				宇宙<span>(0)</span></a>
+			 
+		</div>
+		</div>
+
+	</div>	
+	
+		</div>
+	</div> 
+</div>
+             
+            <footer class="main-footer footer-type-1 text-xs">
+                <div id="footer-tools" class="d-flex flex-column">
+                    <a href="javascript:" id="go-to-up" class="btn rounded-circle go-up m-1" rel="go-top">
+                        <i class="iconfont icon-to-up"></i>
+                    </a>
+                                                            <a href="javascript:" id="switch-mode" class="btn rounded-circle switch-dark-mode m-1" data-toggle="tooltip" data-placement="left" title="夜间模式">
+                        <i class="mode-ico iconfont icon-light"></i>
+                    </a>
+                </div>
+                <div class="footer-inner">
+                    <div class="footer-text">
+                                                Copyright © 2023 导航站                         &nbsp;&nbsp;Design by <a href="https://www.iowen.cn/" target="_blank"><strong>一为</strong></a>&nbsp;&nbsp;                                            </div>
+                </div>
+            </footer>
+        </div>
+<!-- main-content end -->
+    </div>
+<!-- page-container end -->
+<script type="text/javascript" id="popper-js-extra">
+/* <![CDATA[ */
+var theme = {"ajaxurl":"http:\/\/158666.xyz\/wp-admin\/admin-ajax.php","addico":"http:\/\/158666.xyz\/wp-content\/themes\/webstackpro\/images\/add.png","order":"desc","formpostion":"top","defaultclass":"","isCustomize":"","icourl":"https:\/\/api.iowen.cn\/favicon\/","icopng":".png","urlformat":"1","customizemax":"10","newWindow":"1","lazyload":"1","minNav":"","loading":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/popper.min.js?ver=2.0406" id="popper-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/bootstrap.min.js?ver=2.0406" id="bootstrap-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/theia-sticky-sidebar.js?ver=2.0406" id="sidebar-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/lazyload.min.js?ver=2.0406" id="lazyload-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/jquery.fancybox.min.js?ver=2.0406" id="lightbox-js-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/app.js?ver=2.0406" id="appjs-js"></script>
+<script type="text/javascript" src="https://ssl.captcha.qq.com/TCaptcha.js?ver=2.0406" id="captcha-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-includes/js/comment-reply.min.js?ver=6.2.2" id="comment-reply-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/comments-ajax.js?ver=2.0406" id="comments-ajax-js"></script>
+    <script type="text/javascript">$(document).on('click','a.smooth-n',function(ev) {
+        ev.preventDefault();
+        $("html, body").animate({
+            scrollTop: $($(this).attr("href")).offset().top - 90
+        }, {
+            duration: 500,
+            easing: "swing"
+        });
+    });</script>
+<!-- 自定义代码 -->
+<!-- end 自定义代码 -->
+</body>
+</html>

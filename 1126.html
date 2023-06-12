@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Windows下Hexo的环境配置 | 导航站</title>
+<meta name="theme-color" content="#2C2E2F">
+<meta name="keywords">
+<meta name="description" content="敲击三次回车键，文件目录C:UsersAdministrator.ssh">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://158666.xyz/1126.html"> 
+<meta property="og:title" content="Windows下Hexo的环境配置 | 导航站">
+<meta property="og:description" content="敲击三次回车键，文件目录C:\Users\Administrator.ssh">
+<meta property="og:image" content="https://picoe.oss-cn-hangzhou.aliyuncs.com/20230425195325.png">
+<meta property="og:site_name" content="导航站">
+<link rel="shortcut icon" href="http://158666.xyz/wp-content/themes/webstackpro/images/favicon.png">
+<link rel="apple-touch-icon" href="http://158666.xyz/wp-content/themes/webstackpro/images/app-ico.png">
+<meta name="robots" content="noindex, nofollow">
+<link rel="dns-prefetch" href="//ssl.captcha.qq.com">
+<link rel="dns-prefetch" href="//use.fontawesome.com">
+<link rel="stylesheet" id="wp-block-library-css" href="http://158666.xyz/wp-includes/css/dist/block-library/style.min.css?ver=6.2.2" type="text/css" media="all">
+<link rel="stylesheet" id="classic-theme-styles-css" href="http://158666.xyz/wp-includes/css/classic-themes.min.css?ver=6.2.2" type="text/css" media="all">
+<style id="global-styles-inline-css" type="text/css">body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--duotone--dark-grayscale: url('#wp-duotone-dark-grayscale');--wp--preset--duotone--grayscale: url('#wp-duotone-grayscale');--wp--preset--duotone--purple-yellow: url('#wp-duotone-purple-yellow');--wp--preset--duotone--blue-red: url('#wp-duotone-blue-red');--wp--preset--duotone--midnight: url('#wp-duotone-midnight');--wp--preset--duotone--magenta-yellow: url('#wp-duotone-magenta-yellow');--wp--preset--duotone--purple-green: url('#wp-duotone-purple-green');--wp--preset--duotone--blue-orange: url('#wp-duotone-blue-orange');--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}body .is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}body .is-layout-flex{flex-wrap: wrap;align-items: center;}body .is-layout-flex > *{margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+.wp-block-navigation a:where(:not(.wp-element-button)){color: inherit;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}
+.wp-block-pullquote{font-size: 1.5em;line-height: 1.6;}</style>
+<link rel="stylesheet" id="iconfont-css" href="http://158666.xyz/wp-content/themes/webstackpro/css/iconfont.css?ver=2.0406" type="text/css" media="all">
+<link rel="stylesheet" id="font-awesome-css" href="//use.fontawesome.com/releases/v5.13.0/css/all.css?ver=2.0406" type="text/css" media="all">
+<link rel="stylesheet" id="font-awesome4-css" href="//use.fontawesome.com/releases/v5.13.0/css/v4-shims.css?ver=2.0406" type="text/css" media="all">
+<link rel="stylesheet" id="bootstrap-css" href="http://158666.xyz/wp-content/themes/webstackpro/css/bootstrap.min.css?ver=2.0406" type="text/css" media="all">
+<link rel="stylesheet" id="lightbox-css" href="http://158666.xyz/wp-content/themes/webstackpro/css/jquery.fancybox.min.css?ver=2.0406" type="text/css" media="all">
+<link rel="stylesheet" id="style-css" href="http://158666.xyz/wp-content/themes/webstackpro/css/style.css?ver=2.0406" type="text/css" media="all">
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/jquery.min.js?ver=2.0406" id="jquery-js"></script>
+<link rel="canonical" href="http://158666.xyz/1126.html">
+<link rel="alternate" type="application/json+oembed" href="http://158666.xyz/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fhttp%3A%2F%2F158666.xyz%2F1126.html">
+<link rel="alternate" type="text/xml+oembed" href="http://158666.xyz/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fhttp%3A%2F%2F158666.xyz%2F1126.html#038;format=xml">
+<meta name="bmi-version" content="1.2.9">
+</head> 
+<body class="io-black-mode">
+   <div class="page-container">
+      
+
+        <div id="sidebar" class="sticky sidebar-nav fade ">
+            <div class="modal-dialog h-100  sidebar-nav-inner">
+                <div class="sidebar-logo border-bottom border-color">
+                    <!-- logo -->
+                    <div class="logo overflow-hidden">
+                        <a href="http://158666.xyz/" class="logo-expanded">
+                            <img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo_l@2x.png" height="40" class="d-none" alt="导航站">
+						    <img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo@2x.png" height="40" alt="导航站">
+                        </a>
+                        <a href="http://158666.xyz/" class="logo-collapsed">
+                            <img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo-dark_collapsed@2x.png" height="40" class="d-none" alt="导航站">
+						    <img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo-collapsed@2x.png" height="40" alt="导航站">
+                        </a>
+                    </div>
+                    <!-- logo end -->
+                </div>
+                <div class="sidebar-menu flex-fill">
+                    <div class="sidebar-scroll">
+                        <div class="sidebar-menu-inner">
+                            <ul>
+                                                                        <li class="sidebar-item">
+                                                <a href="http://158666.xyz/#search" class="smooth">
+                                                   <i class="iconfont icon-search  icon-fw icon-lg mr-2"></i>
+                                                   <span>搜索</span>
+                                                </a>
+                                            </li> 
+                                                                                <li class="sidebar-item">
+                                            <a href="javascript:;">
+                                               <i class="fa fa-star icon-fw icon-lg mr-2"></i>
+                                               <span>视频娱乐</span>
+                                               <i class="iconfont icon-arrow-r-m sidebar-more text-sm"></i>
+                                            </a>
+                                            <ul>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-168" class="smooth"><span>在线</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-169" class="smooth"><span>动漫</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-170" class="smooth"><span>下载</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-171" class="smooth"><span>不可说</span></a>
+                                                </li>
+                                                                                            </ul>
+                                        </li>
+                                                                        <li class="sidebar-item">
+                                            <a href="javascript:;">
+                                               <i class="fa fa-eercast icon-fw icon-lg mr-2"></i>
+                                               <span>自定义父级</span>
+                                               <i class="iconfont icon-arrow-r-m sidebar-more text-sm"></i>
+                                            </a>
+                                            <ul>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-50" class="smooth"><span>休闲游戏x小信息</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-55" class="smooth"><span>RPG</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-58" class="smooth"><span>角色扮演</span></a>
+                                                </li>
+                                                                                                
+                                                <li>
+                                                    <a href="http://158666.xyz/#term-57" class="smooth"><span>暗黑</span></a>
+                                                </li>
+                                                                                            </ul>
+                                        </li>
+                                 
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-top py-2 border-color">
+                    <div class="flex-bottom">
+                        <ul> 
+                            <li id="menu-item-222" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-222 sidebar-item"><a href="http://158666.xyz/include">
+        <i class="fas fa-weight icon-fw icon-lg mr-2"></i>
+                <span>申请收录</span></a></li>
+ 
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main-content flex-fill page">
+		<div id="header" class="page-header big sticky">
+			<div class="navbar navbar-expand-md">
+                <div class="container-fluid p-0">
+
+                    <a href="http://158666.xyz/" class="navbar-brand d-md-none">
+						<img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo-dark_collapsed@2x.png" class="logo-light" alt="导航站">
+						<img src="http://158666.xyz/wp-content/themes/webstackpro/images/logo-collapsed@2x.png" class="logo-dark d-none" alt="导航站">
+                    </a>
+                    
+                    <div class="collapse navbar-collapse order-2 order-md-1">
+                        <div class="header-mini-btn">
+                            <label>
+                                <input id="mini-button" type="checkbox" checked>
+                                <svg viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"> 
+                                    <path class="line--1" d="M0 40h62c18 0 18-20-17 5L31 55"></path>
+                                    <path class="line--2" d="M0 50h80"></path>
+                                    <path class="line--3" d="M0 60h62c18 0 18 20-17-5L31 45"></path>
+                                </svg>
+                            </label>
+                        
+                        </div>
+                                                
+                    <!-- 天气  -->
+                    <div id="tp-weather-widget"></div>
+                      <script>(function(a,h,g,f,e,d,c,b){b=function(){d=h.createElement(g);c=h.getElementsByTagName(g)[0];d.src=e;d.charset="utf-8";d.async=1;c.parentNode.insertBefore(d,c)};a["SeniverseWeatherWidgetObject"]=f;a[f]||(a[f]=function(){(a[f].q=a[f].q||[]).push(arguments)});a[f].l=+new Date();if(a.attachEvent){a.attachEvent("onload",b)}else{a.addEventListener("load",b,false)}}(window,document,"script","SeniverseWeatherWidget","//cdn.sencdn.com/widget2/static/js/bundle.js?t="+parseInt((new Date().getTime() / 100000000).toString(),10)));
+                        window.SeniverseWeatherWidget('show', {
+                          flavor: "slim",
+                          location: "WTSQQYHVQ973",
+                          geolocation: true,
+                          language: "zh-Hans",
+                          unit: "c",
+                          theme: "auto",
+                          token: "2d2b0015-6055-42c9-b686-40963fdc0fc4",
+                          hover: "enabled",
+                          container: "tp-weather-widget"
+                        })</script>
+                    <!-- 天气 end -->
+                        						<ul class="navbar-nav site-menu mr-4">
+                            <li id="menu-item-283" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-283"><a href="http://158666.xyz/blog">博客</a></li>
+<li id="menu-item-272" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-272"><a href="#">关于</a></li>
+ 
+						</ul>
+                    </div>
+                    
+                    <ul class="nav navbar-menu text-xs order-1 order-md-2">
+                                                <!-- 一言 -->
+						<li class="nav-item mr-3 mr-lg-0 d-none d-lg-block">
+							<div class="text-sm overflowClip_1">
+                                <script src="//v1.hitokoto.cn/?encode=js&select=%23hitokoto" defer></script> 
+                                <span id="hitokoto"></span> 
+							</div>
+						</li>
+                        <!-- 一言 end -->
+                                                						<li class="nav-item d-md-none mobile-menu ml-4">
+							<a href="javascript:" id="sidebar-switch" data-toggle="modal" data-target="#sidebar"><i class="iconfont icon-classification icon-2x"></i></a>
+						</li>
+                    </ul>
+				</div>
+            </div>
+        </div>
+<div id="content" class="container my-4 my-md-5">
+	<div class="row">
+		<div class="col-lg-8">
+    	    <div class="panel card">
+			<div class="card-body">
+				<div class="panel-header mb-4">
+    	        	    	        	<h1 class="h3 mb-3">Windows下Hexo的环境配置</h1>
+    	        	<div class="d-flex flex-fill text-muted text-sm pb-4 border-bottom border-t">
+    	        	<span class="mr-3 d-none d-sm-block"><a href="http://158666.xyz/uncategorized"><i class="iconfont icon-classification"></i> 未分类</a></span>    	        	<span class="mr-3 d-none d-sm-block"><i class="iconfont icon-time"></i> 5小时前</span>
+					<span class="mr-3"><a href="http://158666.xyz/author/2" title="xonec"><i class="iconfont icon-user-circle"></i> xonec</a></span>
+					<div class="flex-fill"></div>
+					                	<span class="mr-3"><a class="smooth-n" href="#comments"> <i class="iconfont icon-comment"></i> 0</a></span>
+                	<span class="mr-3"><a class="btn-like btn-link-like " href="javascript:;" post_like data-id="1126"><i class="iconfont icon-like"></i> <span class="like-count">0</span></a></span>
+					</div>
+    	        </div>
+				    	        <div class="panel-body mt-2"> 
+					<h1>1、Git的安装和环境配置</h1>
+<h2>1. Git官网链接：<a href="https://git-scm.com/" target="_blank" rel="nofollow">Git</a> ，除了安装位置，其余全部默认</h2>
+<h2>2.  打开cmd 输入<code>git -v</code> 验证安装完成</h2>
+<h2>3.  安装Git后首先要做的事情是设置你的用户名称和e-mail地址。打开 Git Bush 命令行界面，输入：</h2>
+<pre><code>git config --global user.name &quot;name&quot;  #名称  
+git config --global user.email &quot;xx@xx.com&quot;   #邮箱  
+
+例如以下
+git config --global user.name &quot;&quot;  #github名称  
+git config --global user.email &quot;&quot;   #邮箱  </code></pre>
+<p>在GitHub界面点击:<br>
+头像 —&gt; settings —&gt; Emails —&gt; Keep my email addresses private —&gt; <code>4232357+hfhxd@users.noreply.github.com</code><br>
+获取邮箱地址</p>
+<h2>4.  查询配置：</h2>
+<pre><code>git config --global --list  </code></pre>
+<h2>5.  生成ssh文件夹, 在 Git Bush 输入:</h2>
+<pre><code>ssh-keygen -t rsa  </code></pre>
+<p>敲击三次回车键，文件目录C:\Users\Administrator.ssh</p>
+<h2>6.  将ssh文件夹中的公钥（ id_rsa.pub）添加到GitHub管理平台中（添加后会收到邮件提示）</h2>
+<p>在GitHub界面点击:</p>
+<p>头像—&gt;settings—&gt;SSH and GPG keys —&gt; New SSH key —&gt;把id_rsa.pub的内容复制到Key文本框—&gt;Add SSH key</p>
+<h2>7.  在Git Bush 输入：</h2>
+<pre><code>ssh -T git@github.com  </code></pre>
+<h2>8.  新建GitHub仓库，仓库名字必须为 [username].github.io （username必须为你的GitHub名称）</h2>
+<h1>2、Node.js的 安装和环境配置</h1>
+<h2>1.  下载安装<a href="https://nodejs.org/en/download/" target="_blank" rel="nofollow">Nodejs</a>
+</h2>
+<p>点击<a href="https://nodejs.org/zh-cn/download/" target="_blank" rel="nofollow">Node.js</a>进入版本选择页面</p>
+<a href="https://picoe.oss-cn-hangzhou.aliyuncs.com/20230425195325.png" alt="Windows下Hexo的环境配置" data-fancybox="images" data-caption="Windows下Hexo的环境配置" target="_blank" rel="nofollow"><img decoding="async" data-src="https://picoe.oss-cn-hangzhou.aliyuncs.com/20230425195325.png" src="http://158666.xyz/$loadimg_url" alt="Windows下Hexo的环境配置"></a>
+<p>我这里选择的是<a href="https://nodejs.org/dist/v18.16.0/node-v18.16.0-x64.msi" target="_blank" rel="nofollow">Windows安装程序64-bit</a>版本，紧接着会出现如下图所示，点击next就行</p>
+<a href="https://b2.kwxn.eu.org/hexonews/2022/12/af691e6fa44986bbedd5054859135bce.png" alt="Windows下Hexo的环境配置" data-fancybox="images" data-caption="Windows下Hexo的环境配置" target="_blank" rel="nofollow"><img decoding="async" data-src="https://b2.kwxn.eu.org/hexonews/2022/12/af691e6fa44986bbedd5054859135bce.png" src="http://158666.xyz/$loadimg_url" alt="Windows下Hexo的环境配置"></a>
+<p>中间有选择安装位置的，可以选择D盘，或者不改变安装位置，按自己的喜好来</p>
+<p>点击树形图选择安装模式，然后继续next</p>
+<a href="https://b2.kwxn.eu.org/hexonews/2022/12/8229e4ae01fd092bc2491e0edf7adda0.png" alt="Windows下Hexo的环境配置" data-fancybox="images" data-caption="Windows下Hexo的环境配置" target="_blank" rel="nofollow"><img decoding="async" data-src="https://b2.kwxn.eu.org/hexonews/2022/12/8229e4ae01fd092bc2491e0edf7adda0.png" src="http://158666.xyz/$loadimg_url" alt="Windows下Hexo的环境配置"></a>
+<p>这里我是勾选上的</p>
+<a href="https://b2.kwxn.eu.org/hexonews/2022/12/97a71d5bae06d185426f7e9532b4fcca.png" alt="Windows下Hexo的环境配置" data-fancybox="images" data-caption="Windows下Hexo的环境配置" target="_blank" rel="nofollow"><img decoding="async" data-src="https://b2.kwxn.eu.org/hexonews/2022/12/97a71d5bae06d185426f7e9532b4fcca.png" src="http://158666.xyz/$loadimg_url" alt="Windows下Hexo的环境配置"></a>
+<p>然后next然后安装就好了，安装完成后出现终端框跟着步骤走，然后×掉就好了</p>
+<p>之后检查是否安装好，检测是否配置了Node.js环境变量，</p>
+<p>Win+R打开运行 =》输入  <code>cmd</code> =&gt; 输入命令  <code>path</code>  ，输出如下结果：</p>
+<pre><code>PATH=
+C:\Program Files (x86)\Tailscale IPN;
+C:\Program Files\Git\cmd;
+C:\Program Files\nodejs\;
+D:\Bandizip;
+C:\Users\hogar\AppData\Roaming\npm</code></pre>
+<p>我们可以看到环境变量中已经包含了  <code>C:\Program Files\nodejs\</code>  ，即为安装成功</p>
+<h2>2.  执行命令<code>node -v</code>查看node版本</h2>
+<p>Win+R打开运行 =》输入  <code>cmd</code>    =&gt; 输入命令  <code>node --v</code>  ，输出如下结果：</p>
+<a href="https://picoe.oss-cn-hangzhou.aliyuncs.com/20230425200144.png" alt="Windows下Hexo的环境配置" data-fancybox="images" data-caption="Windows下Hexo的环境配置" target="_blank" rel="nofollow"><img decoding="async" data-src="https://picoe.oss-cn-hangzhou.aliyuncs.com/20230425200144.png" src="http://158666.xyz/$loadimg_url" alt="Windows下Hexo的环境配置"></a>
+<h2>3.  执行<code>npm -v</code>查看npm版本</h2>
+<h2>4.  添加国内npm镜像源</h2>
+<pre><code>换源
+
+npm config set registry https://registry.npm.taobao.org  
+
+安装淘宝的 cnpm 管理器  
+
+npm install -g cnpm --registry=http://registry.npm.taobao.org  
+
+查看 cnpm 版本  
+
+cnpm -v</code></pre>
+<p>之后所有的 <code>npm</code>都可替换为 <code>cnpm</code></p>
+<p>到此为止，所有准备工作已经完成，接下来就是Hexo框架的安装</p>
+<h1>3、Hexo的安装与美化</h1>
+<h2>1.安装Hexo</h2>
+<p>在D盘根目录下右键 Git Bash Here</p>
+<a href="https://picoe.oss-cn-hangzhou.aliyuncs.com/202304262258291.png" alt="Windows下Hexo的环境配置" data-fancybox="images" data-caption="Windows下Hexo的环境配置" target="_blank" rel="nofollow"><img decoding="async" data-src="https://picoe.oss-cn-hangzhou.aliyuncs.com/202304262258291.png" src="http://158666.xyz/$loadimg_url" alt="Windows下Hexo的环境配置"></a>
+<pre><code>#安装hexo框架  
+npm install -g hexo-cli  
+或
+cnpm install -g hexo-cli 
+#查看hexo框架版本  
+hexo -v</code></pre>
+<h2>2.初始化博客</h2>
+<p>在D盘根目录下右键 Git Bash Here</p>
+<pre><code># 初始化  
+hexo init  &lt;文件夹名&gt;</code></pre>
+<h2>3.安装Butterfly主题</h2>
+<p>在上条命令中&lt;文件夹名&gt;目录下右键 Git Bash Here</p>
+<pre><code># 从gitee克隆到themes目录
+git clone -b master https://gitee.com/immyw/hexo-theme-butterfly.git themes/butterfly
+
+# 如果你没有 pug 以及 stylus 的渲染器，请下载安装：
+npm install hexo-renderer-pug hexo-renderer-stylus --save
+或
+cnpm install hexo-renderer-pug hexo-renderer-stylus --save</code></pre>
+<p>修改 Hexo 根目录下的 _config.yml，把主题改为 butterfly</p>
+<pre><code>theme: butterfly</code></pre>
+<p>为了减少升级主题后带来的不便，请使用以下方法（建议，可以不做）。</p>
+<p>在 hexo 的根目录创建一个文件 _config.butterfly.yml，并把主题目录的 _config.yml 内容复制到 _config.butterfly.yml 去。( 注意: 复制的是主题的 _config.yml ，而不是 hexo 的 _config.yml)</p>
+<p>注意： 不要把主题目录的 _config.yml 删掉</p>
+<p>注意： 以后只需要在 _config.butterfly.yml 进行配置就行。<br>
+如果使用了 _config.butterfly.yml， 配置主题的 _config.yml 将不会有效果。</p>
+<p>Hexo会自动合併主题中的 _config.yml 和 _config.butterfly.yml 里的配置，如果存在同名配置，会使用 _config.butterfly.yml 的配置，其优先度较高。</p>
+<h2>4.修改主题语言</h2>
+<p>修改 _config.butterfly.yml里的配置</p>
+<pre><code>lang: zh_TW # Language en_US/zh_CN/zh_TW and so on
+修改为
+lang: zh_CN # Language en_US/zh_CN/zh_TW and so on</code></pre>
+<p>代码 (Code Blocks)<br>
+代码块中的所有功能只适用于 Hexo 自带的代码渲染</p>
+<p>如果使用第三方的渲染器，不一定会有效</p>
+<p>代码高亮主题<br>
+默认主题<br>
+自定义主题<br>
+Butterfly 支持6种代码高亮样式：</p>
+<p>darker<br>
+pale night<br>
+light<br>
+ocean<br>
+mac<br>
+mac light<br>
+修改 主题配置文件</p>
+<p>YAML<br>
+1<br>
+highlight_theme: light<br>
+darker</p>
+<p>pale night</p>
+<p>light</p>
+<p>ocean</p>
+<p>mac</p>
+<p>mac light</p>
+<p>代码复制<br>
+主题支持代码复制功能</p>
+<p>修改 主题配置文件</p>
+<p>YAML<br>
+1<br>
+highlight_copy: true</p>
+<p>代码框展开/关闭<br>
+在默认情况下，代码框自动展开，可设置是否所有代码框都关闭状态，点击&gt;可展开代码</p>
+<p>true 全部代码框不展开，需点击&gt;打开<br>
+false 代码框展开，有&gt;点击按钮<br>
+none 不显示&gt;按钮<br>
+修改 主题配置文件</p>
+<p>YAML<br>
+1<br>
+highlight_shrink: true #代码框不展开，需点击 '&gt;' 打开<br>
+你也可以在post/page页对应的markdown文件front-matter添加highlight_shrink来独立配置。</p>
+<p>当主题配置文件中的 highlight_shrink 设为true时，可在front-matter添加highlight_shrink: false来单独配置文章展开代码框。</p>
+<p>当主题配置文件中的 highlight_shrink 设为false时，可在front-matter添加highlight_shrink: true来单独配置文章收缩代码框。</p>
+<p>highlight_shrink: true</p>
+<p>highlight_shrink: false</p>
+<p>highlight_shrink: none</p>
+<p>代码换行<br>
+在默认情况下，Hexo 在编译的时候不会实现代码自动换行。如果你不希望在代码块的区域里有横向滚动条的话，那么你可以考虑开启这个功能。</p>
+<p>修改 主题配置文件</p>
+<p>YAML<br>
+1<br>
+code_word_wrap: true<br>
+如果你是使用 highlight 渲染，需要找到你站点的 Hexo 配置文件_config.yml，将line_number改成false:</p>
+<p>YAML<br>
+1<br>
+2<br>
+3<br>
+4<br>
+5<br>
+highlight:<br>
+enable: true<br>
+line_number: false # &lt;- 改这里<br>
+auto_detect: false<br>
+tab_replace:<br>
+如果你是使用 prismjs 渲染，需要找到你站点的 Hexo 配置文件_config.yml，将line_number改成false:</p>
+<p>YAML<br>
+1<br>
+2<br>
+3<br>
+4<br>
+5<br>
+prismjs:<br>
+enable: false<br>
+preprocess: true<br>
+line_number: false # &lt;- 改这里<br>
+tab_replace: ''<br>
+设置code_word_wrap之前:</p>
+<p>设置code_word_wrap之后:</p>
+<p>代码高度限制<br>
+3.7.0 及以上支持</p>
+<p>可配置代码高度限制，超出的部分会隐藏，并显示展开按钮。</p>
+<p>YAML<br>
+1<br>
+highlight_height_limit: false # unit: px<br>
+注意：</p>
+<p>单位是 px，直接添加数字，如 200</p>
+<p>实际限制高度为 highlight_height_limit + 30 px ，多增加 30px 限制，目的是避免代码高度只超出highlight_height_limit 一点时，出现展开按钮，展开没内容。</p>
+<p>不适用于隐藏后的代码块（ css 设置 display: none）</p>
+<p>作者: Jerry<br>
+連結: <a href="https://butterfly.js.org/posts/4aa8abbe/#%E4%BB%A3%E7%A2%BC%E9%AB%98%E5%BA%A6%E9%99%90%E5%88%B6" target="_blank" rel="nofollow">https://butterfly.js.org/posts/4aa8abbe/#%E4%BB%A3%E7%A2%BC%E9%AB%98%E5%BA%A6%E9%99%90%E5%88%B6</a><br>
+來源: Butterfly<br>
+著作權歸作者所有。商業轉載請聯絡作者獲得授權，非商業轉載請註明出處。</p>
+<h1>4、上传Github</h1>
+<p>首先你要注册一个Github账号，然后创建一个username.github.io的public仓库<br>
+在Hexo目录下右键Git Bash Here<br>
+输入 <code>ssh-keygen -t rsa</code> （主要是生成你跟github联系的秘钥key）</p>
+<pre><code>ssh-keygen -t rsa</code></pre>
+<p>在上面的结果中找到“Your public key has been saved in ”这样的句子，按照文件路径找到id_rsa.pub文件，打开文件并复制其中的内容（这就是SSH）。</p>
+<p>3.在github上settings里面配置SSH<br>
+头像 —&gt; settings —&gt; New SSH —&gt; (Title位置不需要填，其他默认) 粘贴 —&gt; Add SSH key。</p>
+<p>4.测试连接<br>
+命令行输入 <code>ssh -T git@github.com</code><br>
+在第一次测试时会弹出警告，需要填写yes，然后回车。</p>
+<p>至此，完成本地git和远程gihub仓库的连接。</p>
+<p>将本地文件上传到github<br>
+1.在文件夹目录下初始化仓库：</p>
+<pre><code>git init</code></pre>
+<p>然后，创建用户名 ：</p>
+<pre><code>git config --global user.name”用户名(建议是英文)”</code></pre>
+<p>接着：创建邮箱 ：</p>
+<pre><code>git config --global user.email”邮箱地址”</code></pre>
+<p>2.将本地仓库与github关联：</p>
+<pre><code>git remote add origin  git@github.com:ZhongluShi/Test.git</code></pre>
+<p>3.把远程仓库更新与本地分支合并：</p>
+<pre><code>git pull origin master</code></pre>
+<p>4.将修改过的文件提交暂存区 ：</p>
+<pre><code>git add . #提交所有文件
+git add 文件名/工程名</code></pre>
+<p>5.提交暂存区的文件 ：</p>
+<pre><code>git commit -m “相关说明”</code></pre>
+<p>6.将本地主分支更新推到远程 ：</p>
+<pre><code>git push -u origin master</code></pre>
+<p>这个时候再刷新github上的仓库，可以看到相关文件已经传上去了。</p>
+<p><a href="https://hexo.io/zh-cn/docs/github-pages" target="_blank" rel="nofollow">在 GitHub Pages 上部署 Hexo | Hexo</a><br>
+最后，部署自动工作流</p>
+<p>添加Github自动部署工作流：如下图步骤点击</p>
+<a href="https://b2.kwxn.eu.org/hexonews/2022/12/3269c60ee39dba24e4551a27ebd38dec.png" alt="Windows下Hexo的环境配置" data-fancybox="images" data-caption="Windows下Hexo的环境配置" target="_blank" rel="nofollow"><img decoding="async" data-src="https://b2.kwxn.eu.org/hexonews/2022/12/3269c60ee39dba24e4551a27ebd38dec.png" src="http://158666.xyz/$loadimg_url" alt="Windows下Hexo的环境配置"></a>
+<p>然后复制下面所有代码到下图所示地方粘贴，依据图示粘贴，然后按顺序点击</p>
+<pre><code>name: HEXO自动部署  
+
+on:  
+  push:  
+    branches:  
+      - main # default branch  
+
+jobs:  
+  pages:  
+    runs-on: ubuntu-latest  
+    permissions:  
+      contents: write  
+    steps:  
+      - uses: actions/checkout@v2  
+      - name: Use Node.js 18.x  
+        uses: actions/setup-node@v2  
+        with:  
+          node-version: &quot;18&quot;  
+      - name: Cache NPM dependencies  
+        uses: actions/cache@v2  
+        with:  
+          path: node_modules  
+          key: ${{ runner.OS }}-npm-cache  
+          restore-keys: |  
+            ${{ runner.OS }}-npm-cache  
+      - name: Install Dependencies  
+        run: npm install  
+      - name: Build  
+        run: npm run build  
+      - name: Deploy  
+        uses: peaceiris/actions-gh-pages@v3  
+        with:  
+          github_token: ${{ secrets.GITHUB_TOKEN }}  
+          publish_dir: ./public
+</code></pre>
+<a href="https://b2.kwxn.eu.org/hexonews/2022/12/bfd80eea7e37a4a22788116efbd6c742.png" alt="Windows下Hexo的环境配置" data-fancybox="images" data-caption="Windows下Hexo的环境配置" target="_blank" rel="nofollow"><img decoding="async" data-src="https://b2.kwxn.eu.org/hexonews/2022/12/bfd80eea7e37a4a22788116efbd6c742.png" src="http://158666.xyz/$loadimg_url" alt="Windows下Hexo的环境配置"></a>
+<p>然后就会看见工作流执行成功，在推送仓库处查看，也会看见几分钟前推送成功</p>
+<a href="https://b2.kwxn.eu.org/hexonews/2022/12/187282e5d3b5ed6209cebe45156f06f6.png" alt="Windows下Hexo的环境配置" data-fancybox="images" data-caption="Windows下Hexo的环境配置" target="_blank" rel="nofollow"><img decoding="async" data-src="https://b2.kwxn.eu.org/hexonews/2022/12/187282e5d3b5ed6209cebe45156f06f6.png" src="http://158666.xyz/$loadimg_url" alt="Windows下Hexo的环境配置"></a>
+<a href="https://b2.kwxn.eu.org/hexonews/2022/12/739f6435493fe26c99338cc10e38691d.png" alt="Windows下Hexo的环境配置" data-fancybox="images" data-caption="Windows下Hexo的环境配置" target="_blank" rel="nofollow"><img decoding="async" data-src="https://b2.kwxn.eu.org/hexonews/2022/12/739f6435493fe26c99338cc10e38691d.png" src="http://158666.xyz/$loadimg_url" alt="Windows下Hexo的环境配置"></a>
+<ol start="5">
+<li>当部署作业完成后，产生的页面会放在储存库中的 <code>gh-pages</code> 分支。</li>
+<li>在储存库中前往 <code>Settings &gt; Pages &gt; Source</code>，并将 branch 改为 <code>gh-pages</code>。</li>
+<li>前往 <code>https://&lt;你的 GitHub 用户名&gt;.github.io</code> 查看网站。</li>
+</ol>
+<h1>5、Netlify</h1>
+<p>使用Github账号登陆，同步github仓库，</p>
+<a href="https://picoe.oss-cn-hangzhou.aliyuncs.com/202304281842228.png" alt="Windows下Hexo的环境配置" data-fancybox="images" data-caption="Windows下Hexo的环境配置" target="_blank" rel="nofollow"><img decoding="async" data-src="https://picoe.oss-cn-hangzhou.aliyuncs.com/202304281842228.png" src="http://158666.xyz/$loadimg_url" alt="Windows下Hexo的环境配置"></a>
+					    	        </div>
+			
+				<div class="tags my-2">
+									</div>
+    	        			     
+				    	    </div>
+			</div>
+    	    <div class="single-top-area text-sm clearfix card mt-4">
+					
+    	    	<div class="card-body"> 
+    	            <strong>版权声明：</strong><a href="http://158666.xyz/author/2" title="导航站">xonec</a> 发表于 2023-06-12 18:24:32。<br>
+    	            <strong>转载请注明：</strong><a href="http://158666.xyz/1126.html" rel="bookmark" title="本文固定链接 https://dh.158666.xyz/1126.html">Windows下Hexo的环境配置 | 导航站</a>
+    	    	</div>
+					
+    	    </div>
+    	    <div class="near-navigation rounded mt-4 py-2">
+    	    	    	    	    	    	<div class="nav none border-right border-color">
+    	    		<span>上一篇</span>
+    	    		<h4 class="near-title">没有更多了...</h4>
+    	    	</div>
+    	    	    	    	    	    	<div class="nav next border-left border-color">
+    	    		<a class="near-permalink" href="http://158666.xyz/1128.html">
+    	    		<span>下一篇</span>
+    	            <h4 class="near-title">hexo+netlify+Qexo后端+github自动化</h4>
+    	        </a>
+    	    	</div>
+    	    	    	    </div>
+    	    
+<!-- comments -->
+<div id="comments" class="comments">
+	<h1 id="comments-list-title" class="comments-title h5 mx-1 my-4">
+		<i class="iconfont icon-comment"></i>
+		<span class="noticom">
+			<a href="http://158666.xyz/1126.html#respond" class="comments-title">暂无评论</a> 
+		</span>
+	</h1> 
+	<div class="card">
+		<div class="card-body"> 
+						<div id="respond_box">
+				<div id="respond" class="comment-respond">
+					    				<form action="https://dh.158666.xyz/wp-comments-post.php" method="post" id="commentform" class="text-sm mb-4">	
+						<div class="visitor-avatar d-flex flex-fill mb-2">
+														<img class="v-avatar rounded-circle" src="http://158666.xyz/wp-content/themes/webstackpro/images/gravatar.jpg">
+													</div> 
+						<div class="comment-textarea mb-3">
+							<textarea name="comment" id="comment" class="form-control" placeholder="输入评论内容..." tabindex="4" cols="50" rows="3"></textarea>
+						</div>
+							
+						<div id="comment-author-info" class="row  row-sm">
+							<div class="col-sm-6 col-lg-4 mb-3"><input type="text" name="author" id="author" class="form-control" value="" size="22" placeholder="昵称" tabindex="2"></div>	
+							<div class="col-sm-6 col-lg-4 mb-3"><input type="text" name="email" id="email" class="form-control" value="" size="22" placeholder="邮箱" tabindex="3"></div>
+							<div class="col-sm-12 col-lg-4 mb-3"><input type="text" name="url" id="url" class="form-control" value="" size="22" placeholder="网址" tabindex="4"></div>
+						</div>
+												<div class="com-footer text-right">
+							<input type="hidden" id="_wpnonce" name="_wpnonce" value="a13019c435"><input type="hidden" name="_wp_http_referer" value="/1126.html?simply_static_page=32">							<a rel="nofollow" id="cancel-comment-reply-link" style="display: none;" href="javascript:;" class="btn btn-light custom_btn-outline mx-2">再想想</a>
+														<input class="btn btn-dark custom_btn-d" name="submit" type="submit" id="submit" tabindex="5" value="发表评论">
+														<input type="hidden" name="comment_post_ID" value="1126" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+						</div>
+						    				</form>
+					<div class="clear"></div>
+    				  				</div>
+  			</div>	
+						<div id="loading-comments"><span></span></div>
+						<div class="not-comment card"><div class="card-body nothing text-center color-d">暂无评论...</div></div>
+					
+		</div>	
+	</div>
+</div>
+<!-- comments end -->
+		</div> 
+		<div class="sidebar col-lg-4 pl-xl-4 d-none d-lg-block">
+			
+
+	
+			<div id="about_author-7" class="card about_author">
+		
+	<div class="widget-author-cover">
+		<div class="media media-2x1">
+                        <div class="media-content" data-src="https://i.loli.net/2020/01/11/wHoOcfQGhqvlUkd.jpg"></div>
+            		</div>
+		<div class="widget-author-avatar">  
+			<div class="flex-avatar"> 
+			<img alt="" src="https://cn.gravatar.com/avatar/6da082c2b9cf56fb1cfaacd00fbc7b51?s=80&#038;d=retro&#038;r=g" srcset="https://cn.gravatar.com/avatar/6da082c2b9cf56fb1cfaacd00fbc7b51?s=160&#038;d=retro&#038;r=g 2x" class="avatar avatar-80 photo" height="80" width="80" decoding="async">	 
+	  		</div>	 
+	  	</div>
+  	</div>
+    <div class="widget-author-meta text-center p-4">
+      	<div class="h6 mb-3">xonec<small class="d-block">
+			<span class="badge badge-outline-primary mt-2">
+			    博主			</span></small>
+		</div>
+      	<div class="desc text-xs mb-3 overflowClip_2"></div>
+	    <div class="row no-gutters text-center">
+	      	<a href="http://158666.xyz/author/2" target="_blank" class="col">
+	        	<span class="font-theme font-weight-bold text-md">9</span><small class="d-block text-xs text-muted">文章</small>
+	      	</a>
+	      	<a href="http://158666.xyz/author/2" target="_blank" class="col">
+	        	<span class="font-theme font-weight-bold text-md">0</span><small class="d-block text-xs text-muted">评论</small>
+	      	</a>
+	      	<a href="http://158666.xyz/author/2" target="_blank" class="col">
+	        	<span class="font-theme font-weight-bold text-md">34,278</span><small class="d-block text-xs text-muted">浏览</small>
+	      	</a>
+	      	<a href="http://158666.xyz/author/2" target="_blank" class="col">
+	        	<span class="font-theme font-weight-bold text-md">2,797</span><small class="d-block text-xs text-muted">获赞</small>
+	      	</a>
+	    </div>
+	</div>
+
+	
+	</div>
+<div id="hot_comment-12" class="card hot_comment">
+<div class="card-header widget-header"><span><i class="mr-2 iconfont icon-hot"></i>热评文章</span></div>
+	
+	<div class="card-body"> 
+		<div class="list-grid list-rounded my-n2">
+				
+								<div class="list-item py-2">
+										<div class="media media-3x2 rounded col-4 mr-3">
+            	                    	        <a class="media-content" href="http://158666.xyz/1128.html" title="hexo+netlify+Qexo后端+github自动化" data-src="https://b2.kwxn.eu.org/hexonews/2022/12/d78fdf0a560ca5ccdef4aea9e7561188.jpg"></a>
+            	        					</div>
+										<div class="list-content py-0">
+						<div class="list-body">
+							<a href="http://158666.xyz/1128.html" class="list-title overflowClip_2" rel="bookmark">hexo+netlify+Qexo后端+github自动化</a>
+						</div>
+						<div class="list-footer">
+							<div class="d-flex flex-fill text-muted text-xs">
+								<time class="d-inline-block">5小时前</time>
+								<div class="flex-fill"></div>
+								<span class="discuss"><i class="iconfont icon-comment"></i> 0</span>
+							</div>
+						</div>
+					</div>
+				</div> 
+								<div class="list-item py-2">
+										<div class="media media-3x2 rounded col-4 mr-3">
+            	                    	        <a class="media-content" href="http://158666.xyz/1114.html" title="群晖docker部署bitwarden(vaultwarden)、反向代理与浏览器、iOS设置" data-src="https://picoe.oss-cn-hangzhou.aliyuncs.com/img/638ad47808074742.png_e1080.jpg"></a>
+            	        					</div>
+										<div class="list-content py-0">
+						<div class="list-body">
+							<a href="http://158666.xyz/1114.html" class="list-title overflowClip_2" rel="bookmark">群晖docker部署bitwarden(vaultwarden)、反向代理与浏览器、iOS设置</a>
+						</div>
+						<div class="list-footer">
+							<div class="d-flex flex-fill text-muted text-xs">
+								<time class="d-inline-block">5小时前</time>
+								<div class="flex-fill"></div>
+								<span class="discuss"><i class="iconfont icon-comment"></i> 0</span>
+							</div>
+						</div>
+					</div>
+				</div> 
+								<div class="list-item py-2">
+										<div class="media media-3x2 rounded col-4 mr-3">
+            	                    	        <a class="media-content" href="http://158666.xyz/1116.html" title="PVE的local和local-lvm" data-src="https://foxi.buduanwang.vip/wp-content/uploads/2021/09/QQ%E6%88%AA%E5%9B%BE20210927104722.png"></a>
+            	        					</div>
+										<div class="list-content py-0">
+						<div class="list-body">
+							<a href="http://158666.xyz/1116.html" class="list-title overflowClip_2" rel="bookmark">PVE的local和local-lvm</a>
+						</div>
+						<div class="list-footer">
+							<div class="d-flex flex-fill text-muted text-xs">
+								<time class="d-inline-block">5小时前</time>
+								<div class="flex-fill"></div>
+								<span class="discuss"><i class="iconfont icon-comment"></i> 0</span>
+							</div>
+						</div>
+					</div>
+				</div> 
+								<div class="list-item py-2">
+										<div class="media media-3x2 rounded col-4 mr-3">
+            	                    	        <a class="media-content" href="http://158666.xyz/1118.html" title="PVE的优化过程" data-src="https://i.loli.net/2020/01/16/lh6mCo5IuRALM1f.jpg"></a>
+            	        					</div>
+										<div class="list-content py-0">
+						<div class="list-body">
+							<a href="http://158666.xyz/1118.html" class="list-title overflowClip_2" rel="bookmark">PVE的优化过程</a>
+						</div>
+						<div class="list-footer">
+							<div class="d-flex flex-fill text-muted text-xs">
+								<time class="d-inline-block">5小时前</time>
+								<div class="flex-fill"></div>
+								<span class="discuss"><i class="iconfont icon-comment"></i> 0</span>
+							</div>
+						</div>
+					</div>
+				</div> 
+								<div class="list-item py-2">
+										<div class="media media-3x2 rounded col-4 mr-3">
+            	                    	        <a class="media-content" href="http://158666.xyz/1120.html" title="国光的vGPU教程" data-src="https://image.3001.net/images/20230112/16734940272580.png"></a>
+            	        					</div>
+										<div class="list-content py-0">
+						<div class="list-body">
+							<a href="http://158666.xyz/1120.html" class="list-title overflowClip_2" rel="bookmark">国光的vGPU教程</a>
+						</div>
+						<div class="list-footer">
+							<div class="d-flex flex-fill text-muted text-xs">
+								<time class="d-inline-block">5小时前</time>
+								<div class="flex-fill"></div>
+								<span class="discuss"><i class="iconfont icon-comment"></i> 0</span>
+							</div>
+						</div>
+					</div>
+				</div> 
+									</div>
+	</div>
+
+	</div>
+<div id="hot_post_img-3" class="card hot_post_img">
+<div class="card-header widget-header"><span><i class="mr-2 iconfont icon-chart-pc"></i>热门文章</span></div>
+	
+	
+	<div class="card-body"> 
+		<div class="list-grid list-rounded my-n2">
+		    		</div>
+	</div>
+
+	</div>
+<div id="cx_tag_cloud-8" class="card cx_tag_cloud">
+<div class="card-header widget-header"><span><i class="mr-2 iconfont icon-tags"></i>热门标签</span></div> 
+		
+		<div class="card-body">
+		<div class="tags text-justify">
+			 
+				<a href="http://158666.xyz/apptag/yizhi" title="益智" class="tag-yizhi color-4">
+				益智<span>(3)</span></a>
+			 
+				<a href="http://158666.xyz/apptag/%e7%a4%be%e4%ba%a4" title="社交" class="tag-%e7%a4%be%e4%ba%a4 color-2">
+				社交<span>(1)</span></a>
+			 
+				<a href="http://158666.xyz/apptag/jiemi" title="解密" class="tag-jiemi color-3">
+				解密<span>(1)</span></a>
+			 
+				<a href="http://158666.xyz/apptag/xiuxian" title="休闲" class="tag-xiuxian color-4">
+				休闲<span>(1)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e6%a0%b8%e6%b3%84%e6%bc%8f" title="核泄漏" class="tag-%e6%a0%b8%e6%b3%84%e6%bc%8f color-8">
+				核泄漏<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e5%81%a5%e5%ba%b7" title="健康" class="tag-%e5%81%a5%e5%ba%b7 color-0">
+				健康<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e7%94%9f%e5%91%bd%e8%b5%b7%e6%ba%90" title="生命起源" class="tag-%e7%94%9f%e5%91%bd%e8%b5%b7%e6%ba%90 color-2">
+				生命起源<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e6%9c%9b%e8%bf%9c%e9%95%9c" title="望远镜" class="tag-%e6%9c%9b%e8%bf%9c%e9%95%9c color-1">
+				望远镜<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e9%bb%91%e6%b4%9e" title="黑洞" class="tag-%e9%bb%91%e6%b4%9e color-3">
+				黑洞<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e7%89%9b%e9%a1%bf" title="牛顿" class="tag-%e7%89%9b%e9%a1%bf color-8">
+				牛顿<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e5%8a%9b%e5%ad%a6" title="力学" class="tag-%e5%8a%9b%e5%ad%a6 color-2">
+				力学<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e5%bc%95%e5%8a%9b%e6%b3%a2" title="引力波" class="tag-%e5%bc%95%e5%8a%9b%e6%b3%a2 color-3">
+				引力波<span>(0)</span></a>
+			 
+				<a href="http://158666.xyz/tag/%e5%ae%87%e5%ae%99" title="宇宙" class="tag-%e5%ae%87%e5%ae%99 color-7">
+				宇宙<span>(0)</span></a>
+			 
+		</div>
+		</div>
+
+	</div>	
+	
+		</div>
+	</div> 
+</div>
+             
+            <footer class="main-footer footer-type-1 text-xs">
+                <div id="footer-tools" class="d-flex flex-column">
+                    <a href="javascript:" id="go-to-up" class="btn rounded-circle go-up m-1" rel="go-top">
+                        <i class="iconfont icon-to-up"></i>
+                    </a>
+                                                            <a href="javascript:" id="switch-mode" class="btn rounded-circle switch-dark-mode m-1" data-toggle="tooltip" data-placement="left" title="夜间模式">
+                        <i class="mode-ico iconfont icon-light"></i>
+                    </a>
+                </div>
+                <div class="footer-inner">
+                    <div class="footer-text">
+                                                Copyright © 2023 导航站                         &nbsp;&nbsp;Design by <a href="https://www.iowen.cn/" target="_blank"><strong>一为</strong></a>&nbsp;&nbsp;                                            </div>
+                </div>
+            </footer>
+        </div>
+<!-- main-content end -->
+    </div>
+<!-- page-container end -->
+<script type="text/javascript" id="popper-js-extra">
+/* <![CDATA[ */
+var theme = {"ajaxurl":"http:\/\/158666.xyz\/wp-admin\/admin-ajax.php","addico":"http:\/\/158666.xyz\/wp-content\/themes\/webstackpro\/images\/add.png","order":"desc","formpostion":"top","defaultclass":"","isCustomize":"","icourl":"https:\/\/api.iowen.cn\/favicon\/","icopng":".png","urlformat":"1","customizemax":"10","newWindow":"1","lazyload":"1","minNav":"","loading":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/popper.min.js?ver=2.0406" id="popper-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/bootstrap.min.js?ver=2.0406" id="bootstrap-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/theia-sticky-sidebar.js?ver=2.0406" id="sidebar-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/lazyload.min.js?ver=2.0406" id="lazyload-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/jquery.fancybox.min.js?ver=2.0406" id="lightbox-js-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/app.js?ver=2.0406" id="appjs-js"></script>
+<script type="text/javascript" src="https://ssl.captcha.qq.com/TCaptcha.js?ver=2.0406" id="captcha-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-includes/js/comment-reply.min.js?ver=6.2.2" id="comment-reply-js"></script>
+<script type="text/javascript" src="http://158666.xyz/wp-content/themes/webstackpro/js/comments-ajax.js?ver=2.0406" id="comments-ajax-js"></script>
+    <script type="text/javascript">$(document).on('click','a.smooth-n',function(ev) {
+        ev.preventDefault();
+        $("html, body").animate({
+            scrollTop: $($(this).attr("href")).offset().top - 90
+        }, {
+            duration: 500,
+            easing: "swing"
+        });
+    });</script>
+<!-- 自定义代码 -->
+<!-- end 自定义代码 -->
+</body>
+</html>
